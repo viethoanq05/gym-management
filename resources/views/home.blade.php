@@ -80,13 +80,9 @@
                 </nav>
 
                 <div class="flex items-center gap-3">
-                    @if (Route::has('login'))
-                    @auth
-                    <a href="{{ url('/admin/dashboard') }}" class="rounded-xl bg-[var(--brand)] px-4 py-2 text-sm font-bold text-white transition hover:bg-[var(--brand-strong)]">Bảng điều khiển</a>
-                    @else
+                    
                     <a href="{{ route('login') }}" class="rounded-xl bg-[var(--brand)] px-4 py-2 text-sm font-bold text-white transition hover:bg-[var(--brand-strong)]">Đăng nhập</a>
-                    @endauth
-                    @endif
+                    
                 </div>
             </div>
         </header>

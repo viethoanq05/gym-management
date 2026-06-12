@@ -65,9 +65,7 @@
                     <button type="submit" class="w-full rounded-md bg-[var(--brand,#1662ff)] px-4 py-2 text-sm font-bold text-white">Đăng nhập →</button>
                 </div>
 
-                @if($errors->any())
-                <p class="text-center text-sm text-red-600">{{ $errors->first() }}</p>
-                @endif
+                
 
                 <p class="mt-4 text-center text-sm text-slate-500">Chưa có tài khoản? <a href="#" class="text-[var(--brand,#1662ff)]">Đăng ký tài khoản mới</a></p>
             </form>

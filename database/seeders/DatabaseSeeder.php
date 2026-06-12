@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\PackageSeeder;
 use Database\Seeders\MembershipSeeder;
+use Database\Seeders\TrainerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
+            TrainerSeeder::class,
             PackageSeeder::class,
             MembershipSeeder::class,
         ]);
