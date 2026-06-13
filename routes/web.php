@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Staff\StaffController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -31,7 +32,16 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:staff'])->group(function () {
+    
     Route::get('/staff/dashboard', function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
+
+    
+    Route::get('/staff/check-in', [StaffController::class, 'showCheckIn'])->name('staff.checkin');
+    
+    
+    Route::post('/staff/check-in/search', [StaffController::class, 'searchMember'])->name('staff.search');
+
+    Route::post('/staff/check-in/{id}/confirm', [StaffController::class, 'storeCheckIn'])->name('staff.checkin.confirm');
 });
