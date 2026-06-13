@@ -7,8 +7,21 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    private function redirectByRole()
+    {
+        return match (Auth::user()->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'trainer' => redirect()->route('trainer.dashboard'),
+            'member' => redirect()->route('member.dashboard'),
+            'staff' => redirect()->route('staff.dashboard'),
+            default => redirect()->route('/'),
+        };
+    }
     public function showLogin()
     {
+        if (Auth::check()) {
+            return $this->redirectByRole();
+        }
         return view('auth.login');
     }
 
@@ -24,15 +37,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            $role = Auth::user()->role ?? null;
-
-            return match ($role) {
-                'admin' => redirect()->intended('/admin/dashboard'),
-                'trainer' => redirect()->intended('/trainer/dashboard'),
-                'member' => redirect()->intended('/member/dashboard'),
-                'staff' => redirect()->intended('/staff/dashboard'),
-                default => redirect()->intended('/'),
-            };
+            return $this->redirectByRole();
         }
 
         return back()->withErrors(['email' => 'Thông tin đăng nhập không hợp lệ.'])->onlyInput('email');
