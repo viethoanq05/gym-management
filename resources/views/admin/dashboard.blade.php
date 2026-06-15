@@ -4,12 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard - Iron Core</title>
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
+    <title>Admin Dashboard - Gym Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    @endif
     <style>
         body {
             font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -23,10 +19,10 @@
         <div class="mx-auto grid max-w-[1500px] gap-6 xl:grid-cols-[280px_1fr]">
             <aside class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
                 <div class="mb-10 flex items-center gap-3 rounded-3xl bg-slate-900 px-4 py-4 text-white shadow-[0_20px_60px_rgba(15,23,42,0.1)]">
-                    <div class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500 text-xl font-bold">I</div>
+                    <div class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500 text-xl font-bold">Pro</div>
                     <div>
-                        <p class="text-xs uppercase tracking-[0.35em] text-slate-300">Iron Core</p>
-                        <p class="text-sm font-semibold">Premium Management</p>
+                        <p class="text-xs uppercase tracking-[0.35em] text-slate-300">Gym Management</p>
+                        <p class="text-sm font-semibold">Premium</p>
                     </div>
                 </div>
                 <nav class="space-y-2 text-sm font-medium text-slate-700">
