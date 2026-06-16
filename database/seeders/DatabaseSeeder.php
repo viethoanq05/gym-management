@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TrainerSeeder::class,
             PackageSeeder::class,
+            MemberSeeder::class,
             MembershipSeeder::class,
+            PaymentSeeder::class,
+            CheckinSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }
