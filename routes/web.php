@@ -8,15 +8,24 @@ use App\Http\Controllers\Admin\DashboardController;
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'check_role:admin']) 
+    ->middleware(['auth', 'check_role:admin'])
     ->name('admin.dashboard');
-    
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // Temporary admin members routes (safe placeholders until full controller exists)
+    Route::get('/admin/members', function () {
+        $members = collect([]); // placeholder empty collection
+        return view('admin.members.index', compact('members'));
+    })->name('admin.members.index');
+
+    Route::get('/admin/members/create', function () {
+        return redirect()->route('admin.members.index');
+    })->name('admin.members.create');
 });
 
 

@@ -1,232 +1,231 @@
-<!DOCTYPE html>
-<html lang="vi">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard - Gym Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f3f6fb;
-        }
-    </style>
-</head>
+@section('title', 'Dashboard')
 
-<body class="min-h-screen bg-[#f3f6fb] text-slate-900">
-    <div class="min-h-screen bg-[#f3f6fb] px-4 py-6 sm:px-6 lg:px-8">
-        <div class="mx-auto grid max-w-[1500px] gap-6 xl:grid-cols-[280px_1fr]">
+@section('content')
+<div class="space-y-6">
+    <!-- Widgets -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        @php
+        $trendRevenue = $trendRevenue ?? '+12%';
+        $trendMembers = $trendMembers ?? '+3%';
+        $trendBookings = $trendBookings ?? '-4%';
+        $trendPT = $trendPT ?? '+0%';
+        @endphp
 
-            <aside class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                <div class="mb-10 flex items-center gap-3 rounded-3xl bg-slate-900 px-4 py-4 text-white shadow-[0_20px_60px_rgba(15,23,42,0.1)]">
-                    <div class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500 text-xl font-bold">Pro</div>
-                    <div>
-                        <p class="text-xs uppercase tracking-[0.35em] text-slate-300">Gym Management</p>
-                        <p class="text-sm font-semibold">Premium</p>
-                    </div>
+        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <p class="text-sm text-slate-500">Tổng doanh thu</p>
+                <div class="h-10 w-10 rounded-lg bg-green-100 text-green-700 flex items-center justify-center">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 1v22" />
+                    </svg>
                 </div>
-                <nav class="space-y-2 text-sm font-medium text-slate-700">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-3xl bg-blue-50 px-4 py-3 text-slate-900 shadow-sm shadow-blue-200/40">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">🏠</span>
-                        Tổng quan
-                    </a>
-                    <a href="#" class="flex items-center gap-3 rounded-3xl px-4 py-3 transition hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">👥</span>
-                        Hội viên
-                    </a>
-                    <a href="#" class="flex items-center gap-3 rounded-3xl px-4 py-3 transition hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">🧑‍💼</span>
-                        Nhân viên
-                    </a>
-                    <a href="#" class="flex items-center gap-3 rounded-3xl px-4 py-3 transition hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">📦</span>
-                        Gói tập
-                    </a>
-                    <a href="#" class="flex items-center gap-3 rounded-3xl px-4 py-3 transition hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">📅</span>
-                        Đặt lịch
-                    </a>
-                    <a href="#" class="flex items-center gap-3 rounded-3xl px-4 py-3 transition hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-600">📊</span>
-                        Báo cáo
-                    </a>
-                </nav>
-                <div class="mt-10 rounded-[24px] bg-slate-900 px-5 py-6 text-white">
-                    <p class="text-xs uppercase tracking-[0.35em] text-slate-400">Cài đặt</p>
-                    <p class="mt-2 text-sm font-semibold">{{ Auth::user()->name ?? 'Quản trị viên' }}</p>
+            </div>
+            <div class="mt-3">
+                <div class="text-2xl font-bold truncate">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }} đ</div>
+                <div class="text-sm text-slate-400 mt-1">Trong tháng</div>
+                <div class="mt-2 text-sm text-green-600">↑ {{ $trendRevenue }} so với tháng trước</div>
+            </div>
+        </div>
 
-                    <form method="POST" action="{{ route('logout') }}" class="mt-4">
-                        @csrf
-                        <button type="submit" class="text-sm text-red-400 hover:text-red-300">Đăng xuất ➜</button>
-                    </form>
+        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <p class="text-sm text-slate-500">Hội viên active</p>
+                <div class="h-10 w-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 12a5 5 0 100-10 5 5 0 000 10z" />
+                    </svg>
                 </div>
-            </aside>
+            </div>
+            <div class="mt-3">
+                <div class="text-2xl font-bold truncate">{{ $totalMembers ?? 0 }}</div>
+                <div class="text-sm text-slate-400 mt-1">Tổng hiện tại</div>
+                <div class="mt-2 text-sm text-green-600">↑ {{ $trendMembers }} so với tháng trước</div>
+            </div>
+        </div>
 
-            <main class="space-y-6">
-                <header class="rounded-[28px] border border-slate-200 bg-white px-6 py-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                        <div>
-                            <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Tổng quan hệ thống</p>
-                            <h1 class="mt-3 text-3xl font-bold text-slate-900">Chào mừng trở lại, {{ Auth::user()->name ?? 'Admin' }}</h1>
-                        </div>
-                        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
-                            <label class="relative block w-full sm:w-auto">
-                                <span class="sr-only">Tìm kiếm</span>
-                                <input type="search" placeholder="Tìm kiếm hội viên..." class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
-                                <span class="pointer-events-none absolute inset-y-0 right-4 inline-flex items-center text-slate-400">🔍</span>
-                            </label>
-                            <button class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-700">Check In nhanh</button>
-                        </div>
-                    </div>
-                </header>
+        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <p class="text-sm text-slate-500">Booking hôm nay</p>
+                <div class="h-10 w-10 rounded-lg bg-yellow-100 text-yellow-700 flex items-center justify-center">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M8 7h8M8 11h8M8 15h8" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="text-2xl font-bold truncate">{{ $bookingsToday ?? 0 }}</div>
+                <div class="text-sm text-slate-400 mt-1">Hôm nay</div>
+                <div class="mt-2 text-sm text-{{ \Illuminate\Support\Str::startsWith(($trendBookings ?? ''), '-') ? 'red-600' : 'green-600' }}">{{ $trendBookings }} so với hôm trước</div>
+            </div>
+        </div>
 
-                <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <p class="text-sm font-semibold text-slate-500">Tổng Hội viên</p>
-                        <h2 class="mt-4 text-3xl font-bold text-slate-900">{{ $totalMembers ?? 0 }}</h2>
-                    </article>
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <p class="text-sm font-semibold text-slate-500">Hội viên mới (Tháng)</p>
-                        <h2 class="mt-4 text-3xl font-bold text-slate-900">{{ $totalNewMembers ?? 0 }}</h2>
-                    </article>
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <p class="text-sm font-semibold text-slate-500">Doanh thu tháng (VND)</p>
-                        <h2 class="mt-4 text-3xl font-bold text-slate-900">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</h2>
-                    </article>
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-500">Lượt check-in</p>
-                                <h2 class="mt-4 text-3xl font-bold text-slate-900">{{ $totalCheckIns ?? 0 }}</h2>
-                            </div>
-                            <span class="rounded-3xl bg-slate-100 px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-600">Hôm nay</span>
-                        </div>
-                    </article>
-                </section>
-
-                <section class="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Xu hướng doanh thu</p>
-                                <h2 class="mt-3 text-2xl font-bold text-slate-900">7 ngày gần nhất</h2>
-                            </div>
-                            <div class="rounded-3xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">Tuần này</div>
-                        </div>
-                        <div class="overflow-hidden rounded-[24px] bg-slate-50 p-6">
-                            <div class="mb-6 flex items-center justify-between text-sm text-slate-500">
-                                <span>Doanh thu</span>
-                                <span>VNĐ</span>
-                            </div>
-                            <div class="h-72 w-full">
-                                <canvas id="revenueChart" class="w-full h-full"></canvas>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-                        <div class="mb-6 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Lịch đặt mới</p>
-                                <h2 class="mt-3 text-2xl font-bold text-slate-900">Xem tất cả</h2>
-                            </div>
-                            <button class="rounded-3xl bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-700">Xem tất cả</button>
-                        </div>
-
-                        <div class="space-y-4">
-                            @if(isset($recentActivities) && $recentActivities->isNotEmpty())
-                            @foreach($recentActivities as $activity)
-                            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                                <p class="text-sm font-semibold text-slate-900">{{ $activity->user_name }} đã đặt lịch tập</p>
-                                <p class="mt-1 text-xs text-slate-500">Mã lịch: #{{ $activity->id }} • {{ \Carbon\Carbon::parse($activity->created_at)->diffForHumans() }}</p>
-                            </div>
-                            @endforeach
-                            @else
-                            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-center">
-                                <p class="text-sm font-semibold text-slate-500">Chưa có hoạt động nào gần đây</p>
-                            </div>
-                            @endif
-                        </div>
-                    </article>
-                </section>
-            </main>
+        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <p class="text-sm text-slate-500">PT đang rảnh</p>
+                <div class="h-10 w-10 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2l3 7H9l3-7zM5 20h14v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-3">
+                <div class="text-2xl font-bold truncate">{{ $availablePT ?? 0 }}</div>
+                <div class="text-sm text-slate-400 mt-1">Sẵn sàng</div>
+                <div class="mt-2 text-sm text-green-600">{{ $trendPT }} so với tuần trước</div>
+            </div>
         </div>
     </div>
 
-    <div id="dashboard-chart-data"
-        data-labels='@json($chartLabels ?? [])'
-        data-values='@json($chartData ?? [])'
-        style="display: none;"></div>
+    <!-- Chart + Recent Bookings -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="col-span-2 rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold">Doanh thu (7 ngày)</h3>
+                <p class="text-sm text-slate-400">Đơn vị: VNĐ</p>
+            </div>
+            <div class="mt-4 h-64 w-full">
+                <div id="revenueChart" class="w-full h-full"></div>
+            </div>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition">
+            <h3 class="text-lg font-semibold mb-3">5 Lịch đặt mới nhất</h3>
+            <div class="mt-2">
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto text-sm">
+                        <thead>
+                            <tr class="text-left text-xs text-slate-500">
+                                <th class="pb-3">Mã</th>
+                                <th class="pb-3">Người đặt</th>
+                                <th class="pb-3">Ngày</th>
+                                <th class="pb-3">Giờ</th>
+                                <th class="pb-3">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($recentActivities) && $recentActivities->isNotEmpty())
+                            @foreach($recentActivities as $b)
+                            @php
+                            $status = strtolower($b->status ?? 'pending');
+                            $badge = match($status) {
+                            'confirmed' => ['bg' => 'bg-green-100','text' => 'text-green-700','label' => 'Đã xác nhận'],
+                            'completed' => ['bg' => 'bg-blue-100','text' => 'text-blue-700','label' => 'Hoàn thành'],
+                            default => ['bg' => 'bg-yellow-100','text' => 'text-yellow-700','label' => 'Chờ xử lý'],
+                            };
+                            $name = $b->user_name ?? 'Khách';
+                            $initials = trim(collect(explode(' ', $name))->map(fn($p)=>substr($p,0,1))->join('')) ?: 'U';
+                            @endphp
+                            <tr class="border-t hover:bg-slate-50">
+                                <td class="py-3">#{{ $b->id }}</td>
+                                <td class="py-3 flex items-center gap-3">
+                                    <div class="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center">{{ $initials }}</div>
+                                    <div>{{ $name }}</div>
+                                </td>
+                                <td class="py-3">{{ $b->booking_date ?? \Carbon\Carbon::parse($b->created_at)->format('d/m/Y') }}</td>
+                                <td class="py-3">{{ $b->start_time ?? '—' }}</td>
+                                <td class="py-3">
+                                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $badge['bg'] }} {{ $badge['text'] }}">{{ $badge['label'] }}</span>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5" class="py-6 text-center text-slate-500">Chưa có lịch đặt mới</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script>
-        // Bọc toàn bộ code vào window.onload để chắc chắn thẻ canvas đã hiển thị xong trên trình duyệt
-        window.onload = function() {
-            const canvasElement = document.getElementById('revenueChart');
-            const chartDataElement = document.getElementById('dashboard-chart-data');
+<div id="dashboard-chart-data" data-labels='@json($chartLabels ?? [])' data-values='@json($chartData ?? [])' style="display:none"></div>
 
-            // Kiểm tra bảo vệ nếu không tìm thấy thẻ canvas thì không chạy tiếp để tránh sập trang
-            if (!canvasElement) {
-                console.error("Không tìm thấy thẻ canvas với id 'revenueChart'!");
-                return;
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const el = document.getElementById('dashboard-chart-data');
+        let labels = JSON.parse(el?.dataset.labels || '[]');
+        let values = JSON.parse(el?.dataset.values || '[]');
+
+        // If no server data, generate mock last 7 days
+        if (!labels.length || !values.length) {
+            labels = [];
+            values = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                labels.push(d.toLocaleDateString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit'
+                }));
+                values.push(Math.floor(Math.random() * 2000000));
             }
+        }
 
-            const ctx = canvasElement.getContext('2d');
-            const labels = JSON.parse((chartDataElement && chartDataElement.dataset.labels) || '[]');
-            const dataValues = JSON.parse((chartDataElement && chartDataElement.dataset.values) || '[]');
-
-            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
-            gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Doanh thu ngày',
-                        data: dataValues,
-                        borderColor: '#2563eb',
-                        backgroundColor: gradient,
-                        borderWidth: 4,
-                        fill: true,
-                        tension: 0.35,
-                        pointBackgroundColor: '#2563eb',
-                        pointHoverRadius: 7
-                    }]
+        const options = {
+            series: [{
+                name: 'Doanh thu',
+                data: values
+            }],
+            chart: {
+                type: 'area',
+                height: '100%',
+                toolbar: {
+                    show: false
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(226, 232, 240, 0.6)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString('vi-VN') + ' đ';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+                sparkline: {
+                    enabled: false
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.6,
+                    opacityTo: 0.05
+                }
+            },
+            colors: ['#2563eb'],
+            xaxis: {
+                categories: labels,
+                labels: {
+                    style: {
+                        colors: '#94a3b8'
                     }
                 }
-            });
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(val) {
+                        return new Intl.NumberFormat('vi-VN').format(val);
+                    }
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
+                    }
+                }
+            },
         };
-    </script>
-</body>
 
-</html>
+        const chartEl = document.querySelector('#revenueChart');
+        if (chartEl) {
+            const chart = new ApexCharts(chartEl, options);
+            chart.render();
+        }
+    });
+</script>
+@endpush
+
+@endsection
