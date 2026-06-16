@@ -1,14 +1,22 @@
 <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="absolute left-0 top-0 z-30 flex h-screen w-72 flex-col overflow-y-hidden bg-slate-900 duration-300 ease-linear lg:static lg:translate-x-0">
-    <div class="flex h-full flex-col px-5 py-6 overflow-y-auto">
-        <div class="mb-8 flex items-center gap-3">
-            <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 text-xl font-bold text-white">G</div>
-            <div>
-                <p class="text-sm uppercase tracking-[0.2em] text-slate-400">Gym Management</p>
-                <h1 class="text-xl font-semibold text-white">Admin Panel</h1>
+    <div class="relative flex h-full flex-col px-5 py-6 overflow-y-auto">
+        <div class="mb-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-12 w-12 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 text-xl font-bold text-white">G</div>
+                <div>
+                    <p class="text-sm uppercase tracking-[0.2em] text-slate-400">Gym Management</p>
+                    <h1 class="text-xl font-semibold text-white">Admin Panel</h1>
+                </div>
             </div>
+            <button @click="sidebarOpen = false" class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-md bg-slate-800 text-slate-200 hover:bg-slate-700">
+                <span class="sr-only">Đóng menu</span>
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
 
-        <nav @click="if(window.innerWidth < 1024) sidebarOpen = false" class="space-y-1">
+        <nav @click="sidebarOpen = false" class="space-y-1 lg:space-y-2">
             @php
             $links = [
             ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'M3 12h18M3 6h18M3 18h18'],

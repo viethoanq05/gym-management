@@ -9,9 +9,9 @@
 </head>
 
 <body class="bg-slate-50 text-slate-900 font-sans antialiased">
-    <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden bg-slate-50">
+    <div x-data="{ sidebarOpen: false, init() { window.addEventListener('resize', () => { if (window.innerWidth < 1024) this.sidebarOpen = false }) } }" class="flex h-screen overflow-hidden bg-slate-50">
         <!-- Overlay backdrop for mobile -->
-        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-20 bg-slate-900/50 lg:hidden" @click="sidebarOpen = false"></div>
+        <div x-show="sidebarOpen" x-cloak x-transition.opacity class="fixed inset-0 z-20 bg-slate-900/50 lg:hidden" @click="sidebarOpen = false"></div>
 
         <!-- Sidebar -->
         @include('components.admin.sidebar')

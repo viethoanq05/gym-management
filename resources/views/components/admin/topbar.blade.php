@@ -5,15 +5,7 @@
         </svg>
     </button>
 
-    <div class="relative w-full max-w-xl ml-3 lg:ml-0">
-        <span class="pointer-events-none absolute inset-y-0 left-4 inline-flex items-center text-slate-400">
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <path d="M21 21l-4.35-4.35" />
-            </svg>
-        </span>
-        <input type="search" name="search" placeholder="Tìm kiếm..." class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-12 pr-4 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
-    </div>
+    <div class="flex-1"></div>
 
     <div class="relative inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm ml-auto">
         <button class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-600 transition hover:bg-slate-200">
