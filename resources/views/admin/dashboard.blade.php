@@ -17,6 +17,7 @@
 <body class="min-h-screen bg-[#f3f6fb] text-slate-900">
     <div class="min-h-screen bg-[#f3f6fb] px-4 py-6 sm:px-6 lg:px-8">
         <div class="mx-auto grid max-w-[1500px] gap-6 xl:grid-cols-[280px_1fr]">
+
             <aside class="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
                 <div class="mb-10 flex items-center gap-3 rounded-3xl bg-slate-900 px-4 py-4 text-white shadow-[0_20px_60px_rgba(15,23,42,0.1)]">
                     <div class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500 text-xl font-bold">Pro</div>
@@ -119,23 +120,7 @@
                                 <span>VNĐ</span>
                             </div>
                             <div class="h-72 w-full">
-                                <svg viewBox="0 0 800 320" class="h-full w-full">
-                                    <defs>
-                                        <linearGradient id="chart-gradient" x1="0" x2="0" y1="0" y2="1">
-                                            <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35" />
-                                            <stop offset="100%" stop-color="#93c5fd" stop-opacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                    <path d="M50 220 C150 140 250 160 350 130 C450 100 550 120 650 90 C750 80 750 80 750 80" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round" />
-                                    <path d="M50 220 C150 140 250 160 350 130 C450 100 550 120 650 90 C750 80 750 80 750 320 50 320 Z" fill="url(#chart-gradient)" opacity="0.9" />
-                                    <circle cx="50" cy="220" r="7" fill="#2563eb" />
-                                    <circle cx="150" cy="140" r="7" fill="#2563eb" />
-                                    <circle cx="250" cy="160" r="7" fill="#2563eb" />
-                                    <circle cx="350" cy="130" r="7" fill="#2563eb" />
-                                    <circle cx="450" cy="100" r="7" fill="#2563eb" />
-                                    <circle cx="550" cy="120" r="7" fill="#2563eb" />
-                                    <circle cx="650" cy="90" r="7" fill="#2563eb" />
-                                </svg>
+                                <canvas id="revenueChart" class="w-full h-full"></canvas>
                             </div>
                         </div>
                     </article>
@@ -168,6 +153,80 @@
             </main>
         </div>
     </div>
+
+    <div id="dashboard-chart-data"
+        data-labels='@json($chartLabels ?? [])'
+        data-values='@json($chartData ?? [])'
+        style="display: none;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Bọc toàn bộ code vào window.onload để chắc chắn thẻ canvas đã hiển thị xong trên trình duyệt
+        window.onload = function() {
+            const canvasElement = document.getElementById('revenueChart');
+            const chartDataElement = document.getElementById('dashboard-chart-data');
+
+            // Kiểm tra bảo vệ nếu không tìm thấy thẻ canvas thì không chạy tiếp để tránh sập trang
+            if (!canvasElement) {
+                console.error("Không tìm thấy thẻ canvas với id 'revenueChart'!");
+                return;
+            }
+
+            const ctx = canvasElement.getContext('2d');
+            const labels = JSON.parse((chartDataElement && chartDataElement.dataset.labels) || '[]');
+            const dataValues = JSON.parse((chartDataElement && chartDataElement.dataset.values) || '[]');
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)');
+            gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu ngày',
+                        data: dataValues,
+                        borderColor: '#2563eb',
+                        backgroundColor: gradient,
+                        borderWidth: 4,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#2563eb',
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(226, 232, 240, 0.6)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('vi-VN') + ' đ';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
 </body>
 
 </html>

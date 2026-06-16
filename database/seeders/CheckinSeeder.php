@@ -16,7 +16,7 @@ class CheckinSeeder extends Seeder
             DB::table('checkins')->insert([
                 'member_id' => $member->id,
                 // Check-in đúng vào thời điểm ngày hôm nay để Dashboard đếm được
-                'check_in_time' => Carbon::today()->addHours(rand(8, 18)), 
+                'checkin_time' => Carbon::today()->addHours(rand(8, 18)), 
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
