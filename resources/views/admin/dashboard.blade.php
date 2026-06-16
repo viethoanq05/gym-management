@@ -6,12 +6,7 @@
 <div class="space-y-6">
     <!-- Widgets -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        @php
-        $trendRevenue = $trendRevenue ?? '+12%';
-        $trendMembers = $trendMembers ?? '+3%';
-        $trendBookings = $trendBookings ?? '-4%';
-        $trendPT = $trendPT ?? '+0%';
-        @endphp
+        {{-- No need for defaults, controller provides them --}}
 
         <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
             <div class="flex items-center justify-between">
@@ -57,7 +52,7 @@
             <div class="mt-3">
                 <div class="text-2xl font-bold truncate">{{ $bookingsToday ?? 0 }}</div>
                 <div class="text-sm text-slate-400 mt-1">Hôm nay</div>
-                <div class="mt-2 text-sm text-{{ \Illuminate\Support\Str::startsWith(($trendBookings ?? ''), '-') ? 'red-600' : 'green-600' }}">{{ $trendBookings }} so với hôm trước</div>
+                <div class="mt-2 text-sm text-{{ \Illuminate\Support\Str::startsWith(($trendBookings ?? ''), '-') ? 'red-600' : 'green-600' }}">{{ $trendBookings ?? '0%' }} so với hôm trước</div>
             </div>
         </div>
 
@@ -71,9 +66,9 @@
                 </div>
             </div>
             <div class="mt-3">
-                <div class="text-2xl font-bold truncate">{{ $availablePT ?? 0 }}</div>
+                <div class="text-2xl font-bold truncate">{{ $availableTrainers ?? 0 }}</div>
                 <div class="text-sm text-slate-400 mt-1">Sẵn sàng</div>
-                <div class="mt-2 text-sm text-green-600">{{ $trendPT }} so với tuần trước</div>
+                <div class="mt-2 text-sm text-green-600">{{ $trendPT ?? '+0%' }} so với tuần trước</div>
             </div>
         </div>
     </div>
@@ -86,7 +81,20 @@
                 <p class="text-sm text-slate-400">Đơn vị: VNĐ</p>
             </div>
             <div class="mt-4 h-64 w-full">
+                @php
+                $hasChartData = !empty($chartLabels) && !empty($chartData) && count($chartLabels) > 0;
+                @endphp
+                @if($hasChartData)
                 <div id="revenueChart" class="w-full h-full"></div>
+                @else
+                <div class="w-full h-full flex flex-col items-center justify-center">
+                    <svg class="h-16 w-16 text-slate-300 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 3v18h18" />
+                        <path d="M18 5l-5 5-4-4-6 6" />
+                    </svg>
+                    <p class="text-slate-500">Chưa có dữ liệu giao dịch trong 7 ngày qua</p>
+                </div>
+                @endif
             </div>
         </div>
 
@@ -105,8 +113,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($recentActivities) && $recentActivities->isNotEmpty())
-                            @foreach($recentActivities as $b)
+                            @if(isset($recentBookings) && $recentBookings->isNotEmpty())
+                            @foreach($recentBookings as $b)
                             @php
                             $status = strtolower($b->status ?? 'pending');
                             $badge = match($status) {
@@ -132,7 +140,14 @@
                             @endforeach
                             @else
                             <tr>
-                                <td colspan="5" class="py-6 text-center text-slate-500">Chưa có lịch đặt mới</td>
+                                <td colspan="5" class="py-8">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="h-12 w-12 text-slate-300 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-4-5h-4v4h4v-4z" />
+                                        </svg>
+                                        <p class="text-sm text-slate-500">Hiện tại chưa có lịch đặt nào mới</p>
+                                    </div>
+                                </td>
                             </tr>
                             @endif
                         </tbody>
@@ -151,21 +166,11 @@
         const el = document.getElementById('dashboard-chart-data');
         let labels = JSON.parse(el?.dataset.labels || '[]');
         let values = JSON.parse(el?.dataset.values || '[]');
+        const chartEl = document.querySelector('#revenueChart');
 
-        // If no server data, generate mock last 7 days
-        if (!labels.length || !values.length) {
-            labels = [];
-            values = [];
-            for (let i = 6; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(d.getDate() - i);
-                labels.push(d.toLocaleDateString('vi-VN', {
-                    day: '2-digit',
-                    month: '2-digit'
-                }));
-                values.push(Math.floor(Math.random() * 2000000));
-            }
-        }
+        // Only render if there's actual data
+        if (!chartEl || !labels.length || !values.length) return;
+        if (!values.some(v => v > 0)) return;
 
         const options = {
             series: [{
@@ -219,7 +224,6 @@
             },
         };
 
-        const chartEl = document.querySelector('#revenueChart');
         if (chartEl) {
             const chart = new ApexCharts(chartEl, options);
             chart.render();
