@@ -9,6 +9,7 @@ use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class TrainerController extends Controller
 {
@@ -44,7 +45,8 @@ class TrainerController extends Controller
 
             return redirect()->route('admin.trainers.index')->with('success', 'Tạo trainer thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Trainer store failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -79,7 +81,8 @@ class TrainerController extends Controller
 
             return redirect()->route('admin.trainers.index')->with('success', 'Cập nhật trainer thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Trainer update failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -94,7 +97,8 @@ class TrainerController extends Controller
 
             return redirect()->route('admin.trainers.index')->with('success', 'Xoá trainer thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
+            Log::error('Trainer delete failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.');
         }
     }
 }

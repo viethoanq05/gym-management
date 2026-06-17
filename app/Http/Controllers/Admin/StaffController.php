@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateStaffRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class StaffController extends Controller
 {
@@ -35,7 +36,8 @@ class StaffController extends Controller
 
             return redirect()->route('admin.staff.index')->with('success', 'Tạo nhân viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Staff store failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -62,7 +64,8 @@ class StaffController extends Controller
 
             return redirect()->route('admin.staff.index')->with('success', 'Cập nhật nhân viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Staff update failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -73,7 +76,8 @@ class StaffController extends Controller
             $user->delete();
             return redirect()->route('admin.staff.index')->with('success', 'Xoá nhân viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
+            Log::error('Staff delete failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.');
         }
     }
 }

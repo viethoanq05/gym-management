@@ -23,9 +23,9 @@ class UpdateTrainerRequest extends FormRequest
             'phone' => ['required', 'string', 'max:20', Rule::unique('users', 'phone')->ignore($userId)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
 
-            'description' => ['nullable', 'string'],
-            'specialization' => ['nullable', 'string', 'max:255'],
-            'experience_years' => ['nullable', 'integer', 'min:0'],
+            'description' => ['required', 'string'],
+            'specialization' => ['required', 'string', 'max:255'],
+            'experience_years' => ['required', 'integer', 'min:0'],
         ];
     }
 }

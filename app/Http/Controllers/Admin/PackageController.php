@@ -7,6 +7,7 @@ use App\Http\Requests\StorePackageRequest;
 use App\Http\Requests\UpdatePackageRequest;
 use App\Models\Package;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class PackageController extends Controller
 {
@@ -29,7 +30,8 @@ class PackageController extends Controller
 
             return redirect()->route('admin.packages.index')->with('success', 'Tạo gói tập thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Package store failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -45,7 +47,8 @@ class PackageController extends Controller
 
             return redirect()->route('admin.packages.index')->with('success', 'Cập nhật gói tập thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Package update failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -56,7 +59,8 @@ class PackageController extends Controller
 
             return redirect()->route('admin.packages.index')->with('success', 'Xóa gói tập thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
+            Log::error('Package delete failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.');
         }
     }
 }

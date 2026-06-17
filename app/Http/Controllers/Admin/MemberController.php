@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
 {
@@ -54,7 +55,8 @@ class MemberController extends Controller
 
             return redirect()->route('admin.members.index')->with('success', 'Tạo hội viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Member store failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -93,7 +95,8 @@ class MemberController extends Controller
 
             return redirect()->route('admin.members.index')->with('success', 'Cập nhật hội viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Member update failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -109,7 +112,8 @@ class MemberController extends Controller
 
             return redirect()->route('admin.members.index')->with('success', 'Xoá hội viên thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
+            Log::error('Member delete failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.');
         }
     }
 }

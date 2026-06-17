@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\Member;
 use App\Models\Trainer;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -36,7 +37,8 @@ class BookingController extends Controller
 
             return redirect()->route('admin.bookings.index')->with('success', 'Tạo đặt lịch thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Booking store failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -55,7 +57,8 @@ class BookingController extends Controller
 
             return redirect()->route('admin.bookings.index')->with('success', 'Cập nhật lịch đặt thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage())->withInput();
+            Log::error('Booking update failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.')->withInput();
         }
     }
 
@@ -66,7 +69,8 @@ class BookingController extends Controller
 
             return redirect()->route('admin.bookings.index')->with('success', 'Xóa lịch đặt thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
+            Log::error('Booking delete failed: ' . $e->getMessage());
+            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý dữ liệu. Vui lòng kiểm tra lại hoặc liên hệ quản trị viên.');
         }
     }
 }

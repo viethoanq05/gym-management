@@ -19,9 +19,9 @@ class StoreTrainerRequest extends FormRequest
             'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
-            'description' => ['nullable', 'string'],
-            'specialization' => ['nullable', 'string', 'max:255'],
-            'experience_years' => ['nullable', 'integer', 'min:0'],
+            'description' => ['required', 'string'],
+            'specialization' => ['required', 'string', 'max:255'],
+            'experience_years' => ['required', 'integer', 'min:0'],
         ];
     }
 }

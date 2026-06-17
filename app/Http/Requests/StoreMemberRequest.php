@@ -20,11 +20,11 @@ class StoreMemberRequest extends FormRequest
             'phone' => ['required', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
-            'gender' => ['nullable', 'in:male,female,other'],
-            'dob' => ['nullable', 'date'],
-            'height' => ['nullable', 'numeric'],
-            'weight' => ['nullable', 'numeric'],
-            'join_date' => ['nullable', 'date'],
+            'gender' => ['required', 'in:male,female'],
+            'dob' => ['required', 'date'],
+            'height' => ['required', 'numeric', 'min:0'],
+            'weight' => ['required', 'numeric', 'min:0'],
+            'join_date' => ['required', 'date'],
         ];
     }
 }
