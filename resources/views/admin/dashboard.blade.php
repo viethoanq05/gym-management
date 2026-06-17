@@ -116,11 +116,11 @@
                             @if(isset($recentBookings) && $recentBookings->isNotEmpty())
                             @foreach($recentBookings as $b)
                             @php
-                            $status = strtolower($b->status ?? 'pending');
+                            $status = (int) ($b->status ?? 2);
                             $badge = match($status) {
-                            'confirmed' => ['bg' => 'bg-green-100','text' => 'text-green-700','label' => 'Đã xác nhận'],
-                            'completed' => ['bg' => 'bg-blue-100','text' => 'text-blue-700','label' => 'Hoàn thành'],
-                            default => ['bg' => 'bg-yellow-100','text' => 'text-yellow-700','label' => 'Chờ xử lý'],
+                            1 => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Đã xác nhận'],
+                            0 => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Đã hủy'],
+                            default => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800', 'label' => 'Chờ xử lý'],
                             };
                             $name = $b->user_name ?? 'Khách';
                             $initials = trim(collect(explode(' ', $name))->map(fn($p)=>substr($p,0,1))->join('')) ?: 'U';

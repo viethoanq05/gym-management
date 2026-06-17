@@ -24,6 +24,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::resource('trainers', App\Http\Controllers\Admin\TrainerController::class);
         Route::resource('packages', App\Http\Controllers\Admin\PackageController::class);
         Route::resource('bookings', App\Http\Controllers\Admin\BookingController::class);
+        Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
     });
 });
 
