@@ -18,7 +18,7 @@ class StorePaymentRequest extends FormRequest
             'package_id' => ['required', 'integer', 'exists:packages,id'],
             'amount' => ['required', 'numeric', 'min:0', 'max:99999999'],
             'payment_date' => ['required', 'date'],
-            'payment_method' => ['required', 'string'],
+            'payment_method' => ['required', 'integer', 'in:1,2,3'],
         ];
     }
 
@@ -38,7 +38,8 @@ class StorePaymentRequest extends FormRequest
             'payment_date.required' => 'Ngày thanh toán là trường bắt buộc.',
             'payment_date.date' => 'Ngày thanh toán không hợp lệ.',
             'payment_method.required' => 'Phương thức thanh toán là trường bắt buộc.',
-            'payment_method.string' => 'Phương thức thanh toán không hợp lệ.',
+            'payment_method.integer' => 'Phương thức thanh toán không hợp lệ.',
+            'payment_method.in' => 'Phương thức thanh toán không hợp lệ.',
         ];
     }
 }

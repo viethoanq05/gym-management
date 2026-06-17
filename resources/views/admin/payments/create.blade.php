@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Tạo giao dịch')
+@section('title', 'Thêm giao dịch')
 
 @section('content')
 <div class="space-y-6">
-    <h2 class="text-2xl font-semibold">Tạo giao dịch</h2>
+    <h2 class="text-2xl font-semibold">Thêm giao dịch</h2>
 
     <form id="payment-form" action="{{ route('admin.payments.store') }}" method="POST" class="space-y-6 bg-white p-6 rounded-xl shadow">
         @csrf
@@ -53,9 +53,9 @@
                 <label class="block text-sm font-medium">Phương thức thanh toán</label>
                 <select name="payment_method" class="mt-1 w-full border rounded px-3 py-2 @error('payment_method') border-red-500 bg-rose-50 @enderror">
                     <option value="">Chọn phương thức</option>
-                    <option value="Tiền mặt" {{ old('payment_method') == 'Tiền mặt' ? 'selected' : '' }}>Tiền mặt</option>
-                    <option value="Thẻ tín dụng" {{ old('payment_method') == 'Thẻ tín dụng' ? 'selected' : '' }}>Thẻ tín dụng</option>
-                    <option value="Chuyển khoản" {{ old('payment_method') == 'Chuyển khoản' ? 'selected' : '' }}>Chuyển khoản</option>
+                    <option value="1" {{ old('payment_method') == '1' ? 'selected' : '' }}>Tiền mặt</option>
+                    <option value="2" {{ old('payment_method') == '2' ? 'selected' : '' }}>Thẻ tín dụng</option>
+                    <option value="3" {{ old('payment_method') == '3' ? 'selected' : '' }}>Chuyển khoản</option>
                 </select>
                 @error('payment_method')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

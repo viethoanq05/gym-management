@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Quản lý giao dịch')
+@section('title', 'Giao dịch')
 
 @section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-semibold">Lịch sử giao dịch</h2>
+        <h2 class="text-2xl font-semibold">Giao dịch</h2>
         <a href="{{ route('admin.payments.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             <span>+ Tạo giao dịch</span>
         </a>
@@ -35,8 +35,11 @@
                         <td class="py-4 font-semibold text-green-700">{{ number_format($payment->amount, 0, ',', '.') }} đ</td>
                         <td class="py-4">{{ \Carbon\Carbon::parse($payment->payment_date)->format('d/m/Y') }}</td>
                         <td class="py-4">
+                            @php
+                            $methods = [1 => 'Tiền mặt', 2 => 'Thẻ tín dụng', 3 => 'Chuyển khoản'];
+                            @endphp
                             <span class=\"inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800\">
-                                {{ $payment->payment_method }}
+                                {{ $methods[$payment->payment_method] ?? 'Khác' }}
                             </span>
                         </td>
                         <td class="py-4">

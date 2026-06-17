@@ -69,9 +69,9 @@ class PaymentController extends Controller
 
             return redirect()->route('admin.payments.index')->with('success', 'Tạo giao dịch thành công.');
         } catch (\Exception $e) {
-            Log::error('Payment store failed: ' . $e->getMessage());
+            Log::error('Payment store failed: ' . $e->getMessage() . ' | Trace: ' . $e->getTraceAsString());
 
-            return back()->with('error', 'Đã xảy ra lỗi hệ thống khi xử lý hóa đơn. Vui lòng thử lại.')->withInput();
+            return back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage())->withInput();
         }
     }
 
