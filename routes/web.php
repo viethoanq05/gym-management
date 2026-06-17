@@ -22,6 +22,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::resource('members', App\Http\Controllers\Admin\MemberController::class);
         Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
         Route::resource('trainers', App\Http\Controllers\Admin\TrainerController::class);
+        Route::resource('packages', App\Http\Controllers\Admin\PackageController::class);
+        Route::resource('bookings', App\Http\Controllers\Admin\BookingController::class);
     });
 });
 
