@@ -17,15 +17,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    // Temporary admin members routes (safe placeholders until full controller exists)
-    Route::get('/admin/members', function () {
-        $members = collect([]); // placeholder empty collection
-        return view('admin.members.index', compact('members'));
-    })->name('admin.members.index');
-
-    Route::get('/admin/members/create', function () {
-        return redirect()->route('admin.members.index');
-    })->name('admin.members.create');
+    // Admin resources for members, staff, trainers
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('members', App\Http\Controllers\Admin\MemberController::class);
+        Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
+        Route::resource('trainers', App\Http\Controllers\Admin\TrainerController::class);
+    });
 });
 
 
