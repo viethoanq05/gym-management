@@ -17,6 +17,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard/data', [DashboardController::class, 'getDashboardData'])->name('admin.dashboard.data');
+
     // Admin resources for members, staff, trainers
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('members', App\Http\Controllers\Admin\MemberController::class);
