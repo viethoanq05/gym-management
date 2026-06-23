@@ -220,7 +220,7 @@ $chkData = $peakHours->pluck('checkin_count')->all();
             },
             yaxis: {
                 title: {
-                    text: 'Số lượt',
+                    text: '',
                     style: {
                         color: '#475569',
                         fontSize: '12px'
