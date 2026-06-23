@@ -25,6 +25,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
         Route::resource('trainers', App\Http\Controllers\Admin\TrainerController::class);
         Route::resource('packages', App\Http\Controllers\Admin\PackageController::class);
+        Route::get('reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.export');
         Route::resource('bookings', App\Http\Controllers\Admin\BookingController::class);
         Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
     });
