@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB; // Thêm dòng này để dùng Query Builder
+use App\Models\Payment;
+use App\Models\Booking;
 use App\Exports\RevenueExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,65 +15,79 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        // Parse date range: default from start of current month to today
-        $startDate = $request->query('start_date')
-            ? Carbon::parse($request->query('start_date'))->startOfDay()
-            : Carbon::today()->startOfMonth();
+        // 1. ĐỒNG BỘ THỜI GIAN
+        $startDate = $request->filled('start_date')
+            ? Carbon::parse($request->start_date)->startOfDay()
+            : now()->startOfMonth()->startOfDay();
 
-        $endDate = $request->query('end_date')
-            ? Carbon::parse($request->query('end_date'))->endOfDay()
-            : Carbon::today()->endOfDay();
+        $endDate = $request->filled('end_date')
+            ? Carbon::parse($request->end_date)->endOfDay()
+            : now()->endOfDay();
 
-        // Revenue grouped by package
-        // payments -> memberships -> packages (payments reference membership_id)
-        $revenueByPackage = DB::table('payments')
-            ->join('memberships', 'payments.membership_id', '=', 'memberships.id')
-            ->join('packages', 'memberships.package_id', '=', 'packages.id')
-            ->select(
-                'packages.id as package_id',
-                'packages.name as package_name',
-                DB::raw('SUM(payments.amount) as total_revenue'),
-                DB::raw('COUNT(payments.id) as payments_count')
-            )
-            ->whereBetween('payment_date', [$startDate->toDateString(), $endDate->toDateString()])
-            ->groupBy('packages.id', 'packages.name')
-            ->orderByDesc('total_revenue')
+        // 2. DOANH THU THEO GÓI (Giữ nguyên Eloquent an toàn với Nullsafe)
+        $payments = Payment::whereBetween('payment_date', [$startDate, $endDate])->get();
+
+        $revenueByPackage = $payments->groupBy(function ($payment) {
+            return $payment->package?->name ?? $payment->membership?->package?->name ?? 'Gói mặc định / Khác';
+        })->map(function ($group, $name) {
+            return (object) [
+                'package_name' => $name,
+                'total_revenue' => $group->sum('amount')
+            ];
+        })->values();
+
+        // 3. TOP HLV ĐƯỢC BOOK (Đã fix lỗi thời gian và Business Logic)
+        $bookings = DB::table('bookings')
+            // BÍ QUYẾT: Dùng 'created_at' để tính những lịch được "TẠO RA" trong khoảng thời gian này
+            // Nếu bạn bắt buộc muốn thống kê theo "Ngày tập", hãy đổi lại thành 'booking_date'
+            // và dùng $startDate->toDateString() để an toàn với cột DATE.
+            ->whereBetween('created_at', [$startDate->toDateTimeString(), $endDate->toDateTimeString()])
             ->get();
 
-        // Top trainers by bookings
-        $topTrainers = DB::table('bookings')
-            ->join('trainers', 'bookings.trainer_id', '=', 'trainers.id')
-            ->leftJoin('users', 'trainers.user_id', '=', 'users.id')
-            ->select(
-                'trainers.id as trainer_id',
-                'users.name as trainer_name',
-                DB::raw('COUNT(bookings.id) as bookings_count')
-            )
-            ->whereBetween('booking_date', [$startDate->toDateString(), $endDate->toDateString()])
-            ->groupBy('trainers.id', 'users.name')
-            ->orderByDesc('bookings_count')
-            ->get();
+        // Lấy sẵn danh sách HLV và User để ghép tên thủ công (Cực kỳ an toàn)
+        $trainers = DB::table('trainers')->get()->keyBy('id');
+        $users = DB::table('users')->get()->keyBy('id');
 
-        // Peak check-in hours
+        $topTrainers = collect($bookings)->groupBy('trainer_id')->map(function ($group, $trainerId) use ($trainers, $users) {
+            $trainer = $trainers->get($trainerId);
+            $trainerName = 'HLV ẩn danh #' . $trainerId; // Giá trị mặc định nếu mất data
+
+            // Dò tìm tên thật của HLV qua các bảng
+            if ($trainer && isset($trainer->user_id)) {
+                $user = $users->get($trainer->user_id);
+                if ($user && isset($user->name)) {
+                    $trainerName = $user->name;
+                }
+            }
+
+            return (object) [
+                'trainer_id' => $trainerId,
+                'trainer_name' => $trainerName,
+                'bookings_count' => $group->count(),
+            ];
+        })->sortByDesc('bookings_count')->take(5)->values();
+
+        // 4. CHECK-IN THEO KHUNG GIỜ
         $peakHours = DB::table('checkins')
-            ->select(DB::raw('HOUR(checkin_time) as hour'), DB::raw('COUNT(*) as checkin_count'))
             ->whereBetween('checkin_time', [$startDate->toDateTimeString(), $endDate->toDateTimeString()])
-            ->groupBy(DB::raw('HOUR(checkin_time)'))
-            ->orderByDesc('checkin_count')
+            ->selectRaw('HOUR(checkin_time) as hour, COUNT(id) as checkin_count')
+            ->groupBy('hour')
+            ->orderBy('hour')
             ->get();
 
+        // Trả về View
         return view('admin.reports.index', compact('revenueByPackage', 'topTrainers', 'peakHours', 'startDate', 'endDate'));
     }
 
     public function export(Request $request)
     {
-        $startDate = $request->query('start_date')
-            ? Carbon::parse($request->query('start_date'))->startOfDay()->toDateString()
-            : Carbon::today()->startOfMonth()->toDateString();
+        $startDate = $request->filled('start_date')
+            ? Carbon::parse($request->start_date)->startOfDay()->toDateString()
+            : Carbon::now()->startOfMonth()->toDateString();
 
-        $endDate = $request->query('end_date')
-            ? Carbon::parse($request->query('end_date'))->endOfDay()->toDateString()
-            : Carbon::today()->toDateString();
+        $endDate = $request->filled('end_date')
+            ? Carbon::parse($request->end_date)->endOfDay()->toDateString()
+            : Carbon::now()->toDateString();
 
         return Excel::download(new RevenueExport($startDate, $endDate), 'Bao_cao_doanh_thu.xlsx');
     }
