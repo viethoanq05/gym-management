@@ -7,7 +7,6 @@ use App\Http\Controllers\Staff\StaffController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-// Authentication routes (simple custom handlers)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -17,7 +16,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 });
-
 
 Route::middleware(['auth', 'role:trainer'])->group(function () {
     Route::get('/trainer/dashboard', function () {
@@ -37,11 +35,21 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
 
-    
+    // --- CHECK-IN / CHECK-OUT MODULE ---
     Route::get('/staff/check-in', [StaffController::class, 'showCheckIn'])->name('staff.checkin');
-    
-    
     Route::post('/staff/check-in/search', [StaffController::class, 'searchMember'])->name('staff.search');
-
     Route::post('/staff/check-in/{id}/confirm', [StaffController::class, 'storeCheckIn'])->name('staff.checkin.confirm');
+    Route::post('/staff/check-in/{id}/out', [StaffController::class, 'checkoutMember'])->name('staff.checkin.out');
+
+    // --- SCHEDULES MODULE ---
+    Route::get('/staff/schedules', [StaffController::class, 'showSchedules'])->name('staff.schedules');
+    Route::post('/staff/schedules/{id}/confirm', [StaffController::class, 'confirmSchedule'])->name('staff.schedules.confirm');
+
+    // --- MEMBERSHIPS MODULE ---
+    Route::get('/staff/memberships', [StaffController::class, 'showMemberships'])->name('staff.memberships');
+    Route::post('/staff/memberships/{id}/confirm', [StaffController::class, 'confirmMembership'])->name('staff.memberships.confirm');
+    Route::post('/staff/memberships/{id}/reject', [StaffController::class, 'rejectMembership'])->name('staff.memberships.reject');
+    Route::post('/staff/memberships/{id}/freeze', [StaffController::class, 'freezeMembership'])->name('staff.memberships.freeze');
+    Route::post('/staff/memberships/{id}/unfreeze', [StaffController::class, 'unfreezeMembership'])->name('staff.memberships.unfreeze');
+    Route::post('/staff/memberships/{id}/cancel', [StaffController::class, 'cancelMembership'])->name('staff.memberships.cancel');
 });

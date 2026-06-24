@@ -20,16 +20,23 @@
             <h1 class="text-2xl font-bold text-slate-800 mb-2">Bảng điều khiển nhân viên</h1>
             <p class="text-slate-500 mb-6">Chọn một chức năng bên dưới để bắt đầu làm việc.</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a href="{{ route('staff.checkin') }}" class="block p-6 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition duration-200">
-                    <h3 class="font-bold text-blue-700 text-lg mb-1">Điểm danh hội viên ➔</h3>
-                    <p class="text-sm text-slate-600">Tìm kiếm và duyệt check-in cho khách đến phòng tập bằng ID, Tên hoặc SĐT.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+    
+                <a href="{{ route('staff.checkin') }}" class="flex flex-col items-center justify-center p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:border-blue-500 transition group">
+                    <span class="text-3xl mb-2">📥</span>
+                    <span class="font-bold text-slate-800 group-hover:text-blue-600">Check-in Hội Viên</span>
                 </a>
 
-                <div class="block p-6 bg-slate-50 border border-slate-200 rounded-xl opacity-60">
-                    <h3 class="font-bold text-slate-700 text-lg mb-1">Gia hạn gói tập</h3>
-                    <p class="text-sm text-slate-500">Kích hoạt hoặc gia hạn hợp đồng thẻ thành viên (Sắp mắt mắt).</p>
-                </div>
+                <a href="{{ route('staff.schedules') }}" class="flex flex-col items-center justify-center p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:border-blue-500 transition group">
+                    <span class="text-3xl mb-2">📅</span>
+                    <span class="font-bold text-slate-800 group-hover:text-blue-600">Xác Nhận Lịch Tập</span>
+                </a>
+
+                <a href="{{ route('staff.memberships') }}" class="flex flex-col items-center justify-center p-6 bg-white border border-slate-200 rounded-xl shadow-sm hover:border-blue-500 transition group">
+                    <span class="text-3xl mb-2">💳</span>
+                    <span class="font-bold text-slate-800 group-hover:text-blue-600">Duyệt Đăng Ký Gói</span>
+                </a>
+
             </div>
         </div>
     </main>

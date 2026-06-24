@@ -70,17 +70,38 @@
                             @foreach($members as $member)
                                 <div class="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100 hover:border-blue-200 transition">
                                     <div>
-                                        <h4 class="font-bold text-slate-800">{{ $member->user->name }}</h4>
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="font-bold text-slate-800">{{ $member->user->name }}</h4>
+                                            
+                                            @if(in_array($member->id, $activeCheckinIds ?? []))
+                                                <span class="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                                                    ● Đang tập
+                                                </span>
+                                            @endif
+                                        </div>
                                         <p class="text-xs text-slate-500 mt-0.5">
                                             SĐT: {{ $member->user->phone }} | Email: {{ $member->user->email }}
                                         </p>
                                     </div>
-                                    <form method="POST" action="{{ route('staff.checkin.confirm', $member->id) }}">
-                                        @csrf
-                                        <button type="submit" class="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition shadow-sm">
-                                            Vào phòng ✔
-                                        </button>
-                                    </form>
+                                    
+                                    <!-- 📥 Conditional Button Action (In / Out) -->
+                                    @if(!in_array($member->id, $activeCheckinIds ?? []))
+                                        <!-- If not in the gym, show check-in button -->
+                                        <form method="POST" action="{{ route('staff.checkin.confirm', $member->id) }}">
+                                            @csrf
+                                            <button type="submit" class="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition shadow-sm">
+                                                Vào phòng ✔
+                                            </button>
+                                        </form>
+                                    @else
+                                        <!-- 📤 NEW: If already in the gym, show check-out button instead of static text -->
+                                        <form method="POST" action="{{ route('staff.checkin.out', $member->id) }}">
+                                            @csrf
+                                            <button type="submit" class="rounded-md bg-rose-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-rose-700 transition shadow-sm">
+                                                Check-out 📤
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
