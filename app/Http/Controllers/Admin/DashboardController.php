@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -88,35 +87,21 @@ class DashboardController extends Controller
     public function getDashboardData(Request $request)
     {
         $user = Auth::user();
-
         if (! $user || $user->role !== 'admin') {
-            return response()->json([
-                'message' => 'Unauthorized',
-            ], 403);
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
+        $filter = $request->query('filter', 'this_month');
 
-        $filter = $request->query('filter', '7days');
+        // Lấy dữ liệu trực tiếp, bypass hoàn toàn Cache
+        $metrics = $this->buildDashboardMetrics($filter);
 
-        if ($filter !== '7days') {
-            Cache::forget('admin_dashboard_metrics');
-        }
-
-        $metrics = $this->getDashboardMetrics($filter);
-
-        return response()->json([
-            'data' => $metrics,
-        ]);
+        return response()->json(['data' => $metrics]);
     }
 
-    protected function getDashboardMetrics(string $filter = '7days'): array
+    protected function getDashboardMetrics(string $filter = 'this_month'): array
     {
-        if ($filter !== '7days') {
-            return $this->buildDashboardMetrics($filter);
-        }
-
-        return Cache::remember('admin_dashboard_metrics', now()->addMinutes(10), function () use ($filter) {
-            return $this->buildDashboardMetrics($filter);
-        });
+        // Lấy dữ liệu trực tiếp, bypass hoàn toàn Cache
+        return $this->buildDashboardMetrics($filter);
     }
 
     protected function buildDashboardMetrics(string $filter): array
@@ -143,13 +128,17 @@ class DashboardController extends Controller
             $endDate = $today;
         }
 
+        // Mở rộng mốc thời gian để không bị rớt dữ liệu ngày hôm nay
+        $startStr = $startDate->copy()->startOfDay()->toDateTimeString();
+        $endStr = $endDate->copy()->endOfDay()->toDateTimeString();
+
         $totalRevenue = DB::table('payments')
-            ->whereBetween('payment_date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->whereBetween('payment_date', [$startStr, $endStr])
             ->sum('amount') ?? 0;
 
         $paymentByDay = DB::table('payments')
             ->select(DB::raw('DATE(payment_date) as date'), DB::raw('SUM(amount) as total_amount'))
-            ->whereBetween('payment_date', [$startDate->toDateString(), $endDate->toDateString()])
+            ->whereBetween('payment_date', [$startStr, $endStr])
             ->groupBy(DB::raw('DATE(payment_date)'))
             ->orderBy('date')
             ->pluck('total_amount', 'date')

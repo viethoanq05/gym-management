@@ -304,22 +304,56 @@
         }
 
         function updateChartState(labels, values) {
-            const hasData = labels.length && values.some(v => v > 0);
+            const hasData = labels.length > 0;
 
             if (emptyState) {
                 emptyState.style.display = hasData ? 'none' : 'flex';
             }
 
             if (!hasData) {
-                if (revenueChart) {
-                    revenueChart.data.labels = labels;
-                    revenueChart.data.datasets[0].data = values;
-                    revenueChart.update();
-                }
                 return;
             }
 
             renderChart(labels, values);
+        }
+
+        async function fetchDataAndUpdateChart(filter = '7days') {
+            if (!filterEl) {
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const response = await fetch("{{ route('admin.dashboard.data') }}?filter=" + encodeURIComponent(filter), {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                const payload = await response.json();
+                const data = payload.data;
+
+                if (!data) {
+                    throw new Error('Invalid response');
+                }
+
+                if (data.chartLabels && data.chartData && chartEl) {
+                    chartEl.dataset.dates = JSON.stringify(data.chartLabels);
+                    chartEl.dataset.values = JSON.stringify(data.chartData);
+                    updateChartState(data.chartLabels, data.chartData);
+                }
+
+                updateKpis(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         }
 
         if (chartEl) {
@@ -329,40 +363,11 @@
 
         if (filterEl) {
             filterEl.addEventListener('change', async function() {
-                setLoading(true);
-
-                try {
-                    const response = await fetch("{{ route('admin.dashboard.data') }}?filter=" + encodeURIComponent(this.value), {
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Request failed');
-                    }
-
-                    const payload = await response.json();
-                    const data = payload.data;
-
-                    if (!data) {
-                        throw new Error('Invalid response');
-                    }
-
-                    if (data.chartLabels && data.chartData && chartEl) {
-                        chartEl.dataset.dates = JSON.stringify(data.chartLabels);
-                        chartEl.dataset.values = JSON.stringify(data.chartData);
-                        updateChartState(data.chartLabels, data.chartData);
-                    }
-
-                    updateKpis(data);
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setLoading(false);
-                }
+                await fetchDataAndUpdateChart(this.value);
             });
         }
+
+        fetchDataAndUpdateChart(filterEl ? filterEl.value : '7days');
     });
 </script>
 @endpush
