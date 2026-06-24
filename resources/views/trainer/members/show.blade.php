@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chi tiết hội viên - IRON CORE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    @vite(['resources/js/app.js'])
+    @vite(['resources/css/trainer-dashboard.css', 'resources/js/app.js'])
     <style>
         .member-header {
             background: linear-gradient(135deg, #1662ff 0%, #0f4ed1 100%);
