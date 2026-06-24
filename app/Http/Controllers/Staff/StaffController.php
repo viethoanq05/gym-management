@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Models\Member;
 use App\Models\CheckIn;
 use App\Models\Booking;
 use App\Models\Membership;
+use App\Models\User;
+use App\Models\Member;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -122,5 +124,59 @@ class StaffController extends Controller
         $membership->update(['status' => 3]);
 
         return redirect()->back()->with('success', 'Đã hủy bỏ hoàn toàn gói tập thành công!');
+    }
+
+    public function createMember()
+    {
+        return view('staff.members.create');
+    }
+
+    public function storeMember(Request $request)
+    {
+        $request->validate([
+            //User account
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|unique:users,phone', 
+            'password' => 'required|min:6',
+            
+            //Member table
+            'gender' => 'required|in:male,female',
+            'dob' => 'required|date',
+            'height' => 'nullable|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
+            'join_date' => 'required|date',
+        ], [
+            'email.unique' => 'Email này đã tồn tại trong hệ thống.',
+            'phone.unique' => 'Số điện thoại này đã được đăng ký.'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone, 
+                'password' => Hash::make($request->password),
+                'role' => 'member', 
+            ]);
+
+            Member::create([
+                'user_id' => $user->id,
+                'gender' => $request->gender,
+                'dob' => $request->dob,
+                'height' => $request->height,
+                'weight' => $request->weight,
+                'join_date' => $request->join_date,
+            ]);
+
+            DB::commit();
+            
+            return redirect()->route('staff.dashboard')->with('success', 'Đã thêm hồ sơ hội viên mới thành công!');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Lỗi hệ thống: ' . $e->getMessage())->withInput();
+        }
     }
 }

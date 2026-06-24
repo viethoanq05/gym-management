@@ -37,6 +37,11 @@
                     <span class="font-bold text-slate-800 group-hover:text-blue-600">Duyệt Đăng Ký Gói</span>
                 </a>
 
+                <a href="{{ route('staff.members.create') }}" ... >
+                    <span class="text-3xl mb-2">📝</span>
+                    <span class="font-bold text-slate-800 group-hover:text-blue-600">Thêm Hội Viên Mới</span>
+                </a>
+
             </div>
         </div>
     </main>

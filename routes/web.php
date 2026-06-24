@@ -35,6 +35,10 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
 
+    // --- MEMBER MANAGEMENT MODULE ---
+    Route::get('/staff/members/create', [StaffController::class, 'createMember'])->name('staff.members.create');
+    Route::post('/staff/members', [StaffController::class, 'storeMember'])->name('staff.members.store');
+
     // --- CHECK-IN / CHECK-OUT MODULE ---
     Route::get('/staff/check-in', [StaffController::class, 'showCheckIn'])->name('staff.checkin');
     Route::post('/staff/check-in/search', [StaffController::class, 'searchMember'])->name('staff.search');
