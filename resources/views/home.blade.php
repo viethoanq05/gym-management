@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="IRON CORE GYM - Nâng tầm thể chất, khơi nguồn sức mạnh.">
     <title>IRON CORE GYM</title>
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-    <script src="https://cdn.tailwindcss.com"></script>
-    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -28,201 +24,667 @@
             --soft: #f4f7fb;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Manrope', sans-serif;
             color: var(--text);
-            background:
-                radial-gradient(circle at top left, rgba(22, 98, 255, 0.08), transparent 28%),
-                radial-gradient(circle at top right, rgba(255, 122, 26, 0.08), transparent 24%),
-                linear-gradient(180deg, #f8fbff 0%, #eef3f8 100%);
+            background: linear-gradient(180deg, #f8fbff 0%, #eef3f8 100%);
+            display: flex;
+            flex-direction: column;
         }
 
-        .hero-image {
-            background-image:
-                linear-gradient(180deg, rgba(8, 18, 44, 0.20), rgba(8, 18, 44, 0.40)),
-                url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=80');
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            letter-spacing: 0.24em;
+            color: var(--brand);
+        }
+
+        .logo-subtitle {
+            font-size: 0.6875rem;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            color: #cbd5e1;
+        }
+
+        nav {
+            display: none;
+            gap: 2rem;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        nav a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--brand);
+        }
+
+        @media (min-width: 768px) {
+            nav {
+                display: flex;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--brand);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--brand-strong);
+        }
+
+        .hero {
+            background: linear-gradient(180deg, rgba(8, 18, 44, 0.2), rgba(8, 18, 44, 0.4)),
+                        url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .card-glow {
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .section-title {
+        .hero-badge {
+            display: inline-flex;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            padding: 0.25rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.26em;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
             letter-spacing: -0.03em;
         }
 
-        .soft-grid {
-            background-image:
-                linear-gradient(rgba(255, 255, 255, .36) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, .36) 1px, transparent 1px);
-            background-size: 24px 24px;
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        .hero p {
+            font-size: 1rem;
+            line-height: 1.75;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.75rem 1.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-cta {
+            background: var(--accent);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            box-shadow: 0 8px 25px rgba(255, 122, 26, 0.25);
+        }
+
+        .btn-cta:hover {
+            background: #eb6a10;
+            transform: translateY(-2px);
+        }
+
+        section {
+            width: 100%;
+            padding: 3.5rem 1.5rem;
+        }
+
+        .section-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        #services {
+            background: var(--soft);
+        }
+
+        .grid-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+            transition: all 0.2s;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--brand), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .service-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .service-card p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        #pricing {
+            background: white;
+        }
+
+        .grid-pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--brand);
+            background: linear-gradient(135deg, rgba(22, 98, 255, 0.05), rgba(22, 98, 255, 0.02));
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--brand);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--brand);
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-period {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.5rem 0;
+        }
+
+        .pricing-features li {
+            font-size: 0.875rem;
+            color: var(--text);
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            color: var(--brand);
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--brand);
+            background: white;
+            color: var(--brand);
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: var(--brand);
+            color: white;
+        }
+
+        .pricing-btn:hover {
+            background: var(--brand);
+            color: white;
+        }
+
+        footer {
+            background: #23262f;
+            color: #cbd5e1;
+            padding: 2rem 1.5rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 0.18em;
+        }
+
+        .footer-col p {
+            font-size: 0.875rem;
+            line-height: 1.7;
+            color: #94a3b8;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
+
+        .footer-col a {
+            color: var(--brand);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.75rem 1rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+                min-height: 350px;
+            }
+
+            .hero h1 {
+                font-size: 1.875rem;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            .grid-services {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-pricing {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="header-container">
+                <a href="/" class="logo">
+                    <div>
+                        <div class="logo-title">IRON CORE</div>
+                        <div class="logo-subtitle">GYM & FITNESS</div>
+                    </div>
+                </a>
 
-<body class="min-h-screen text-slate-900">
-    <div class="mx-auto flex min-h-screen max-w-[1180px] flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <header class="rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur md:px-6">
-            <div class="flex items-center justify-between gap-4">
-                <div>
-                    <div class="text-base font-extrabold tracking-[0.24em] text-[var(--brand)]">IRON CORE</div>
-                    <div class="text-[11px] font-medium uppercase tracking-[0.28em] text-slate-400">Gym & Fitness</div>
-                </div>
-
-                <nav class="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
-                    <a class="text-[var(--brand)]" href="#home">Trang chủ</a>
-                    <a class="transition hover:text-[var(--brand)]" href="#services">Dịch vụ</a>
-                    <a class="transition hover:text-[var(--brand)]" href="#offers">Gói tập</a>
-                    <a class="transition hover:text-[var(--brand)]" href="#trainer">PT</a>
-                    <a class="transition hover:text-[var(--brand)]" href="#contact">Liên hệ</a>
+                <nav>
+                    <a href="#services">Dịch vụ</a>
+                    <a href="#pricing">Gói tập</a>
+                    <a href="#contact">Liên hệ</a>
                 </nav>
 
-                <div class="flex items-center gap-3">
-                    
-                    <a href="{{ route('login') }}" class="rounded-xl bg-[var(--brand)] px-4 py-2 text-sm font-bold text-white transition hover:bg-[var(--brand-strong)]">Đăng nhập</a>
-                    
+                <div class="header-actions">
+                    @if(auth()->check())
+                        <span style="color: var(--text); font-weight: 600;">{{ auth()->user()->name }}</span>
+                        <a href="{{ route('trainer.dashboard') }}" class="btn btn-primary">Dashboard</a>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Đăng Xuất</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">Đăng Nhập</a>
+                    @endif
                 </div>
             </div>
         </header>
 
-        <main id="home" class="flex-1">
-            <section class="mt-4 overflow-hidden rounded-[28px] border border-blue-100 bg-white shadow-[0_25px_70px_rgba(15,23,42,0.12)]">
-                <div class="hero-image relative min-h-[430px] px-6 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-20">
-                    <div class="absolute inset-0 soft-grid opacity-20"></div>
-                    <div class="relative mx-auto flex max-w-3xl flex-col items-center text-center text-white">
-                        <span class="mb-4 inline-flex rounded-full border border-white/30 bg-white/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.26em] text-white/90">IRON CORE GYM</span>
-                        <h1 class="section-title max-w-4xl text-4xl font-extrabold uppercase leading-tight sm:text-5xl lg:text-6xl">
-                            Nâng tầm thể chất - Khơi nguồn sức mạnh
-                        </h1>
-                        <p class="mt-5 max-w-2xl text-sm leading-7 text-white/88 sm:text-base">
-                            Trải nghiệm không gian tập luyện hiện đại, huấn luyện chuyên nghiệp và lộ trình cá nhân hóa giúp bạn bứt phá mỗi ngày.
-                        </p>
-                        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                            <a href="#offers" class="rounded-xl bg-[var(--accent)] px-7 py-3 text-sm font-extrabold text-white shadow-lg shadow-orange-500/25 transition hover:-translate-y-0.5 hover:bg-[#eb6a10]">Đăng ký ngay</a>
-                            <a href="#services" class="rounded-xl border border-white/30 bg-white/10 px-7 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Khám phá</a>
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="hero-badge">IRON CORE GYM</div>
+                    <h1>🏋️ Nâng Tầm Thể Chất</h1>
+                    <p>Khơi nguồn sức mạnh với các chương trình tập luyện chuyên nghiệp, huấn luyện viên hàng đầu và công nghệ hiện đại.</p>
+                    @if(!auth()->check())
+                    <div class="hero-actions">
+                        <a href="{{ route('login') }}" class="btn btn-cta">Đăng Nhập</a>
+                        <a href="#services" class="btn btn-secondary">Khám Phá</a>
+                    </div>
+                    @endif
+                </div>
+            </section>
+
+            <section id="services">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Tính Năng Chính</h2>
+                        <p class="section-subtitle">Tất cả những gì bạn cần để đạt mục tiêu fitness</p>
+                    </div>
+
+                    <div class="grid-services">
+                        <div class="service-card">
+                            <i class="fas fa-chart-line service-icon"></i>
+                            <h3>Dashboard</h3>
+                            <p>Theo dõi tiến độ tập luyện, điểm số và thành tích một cách chi tiết.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-calendar service-icon"></i>
+                            <h3>Quản Lý Lịch</h3>
+                            <p>Đặt lịch tập, quản lý thời gian với huấn luyện viên linh hoạt.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-users service-icon"></i>
+                            <h3>Hỗ Trợ PT</h3>
+                            <p>Các huấn luyện viên chuyên nghiệp sẵn sàng giúp bạn đạt mục tiêu.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-heartbeat service-icon"></i>
+                            <h3>Theo Dõi Sức Khỏe</h3>
+                            <p>Quản lý chỉ số sức khỏe, cân nặng, chiều cao và tiến độ cải thiện.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-star service-icon"></i>
+                            <h3>Hệ Thống Điểm</h3>
+                            <p>Nhận điểm thưởng, cạnh tranh lành mạnh và có động lực tập luyện.</p>
+                        </div>
+                        <div class="service-card">
+                            <i class="fas fa-mobile-alt service-icon"></i>
+                            <h3>Truy Cập Di Động</h3>
+                            <p>Truy cập mọi lúc, mọi nơi qua thiết bị di động hoặc máy tính.</p>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div id="services" class="bg-[var(--soft)] px-6 py-14 sm:px-10 lg:px-16">
-                    <div class="mx-auto max-w-6xl">
-                        <div class="text-center">
-                            <h2 class="section-title text-3xl font-extrabold text-[var(--brand)]">Khu Vực Tập Luyện</h2>
-                            <p class="mt-3 text-sm text-[var(--muted)]">Không gian đa dạng đáp ứng mọi nhu cầu thể hình của bạn.</p>
-                        </div>
-
-                        <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-                            @php
-                            $areas = [
-                            ['title' => 'Gym Khu Vực', 'desc' => 'Trang thiết bị tối tân và máy tập hiện đại chuẩn 100%.', 'icon' => 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 4a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2H9a1 1 0 1 1 0-2h2V7a1 1 0 0 1 1-1Z'],
-                            ['title' => 'Yoga Studio', 'desc' => 'Không gian yên tĩnh, ấm áp, tập trung vào sức khỏe toàn diện.', 'icon' => 'M12 3c1.66 0 3 1.34 3 3 0 1.45-1.03 2.66-2.4 2.94V11h2.9c.83 0 1.5.67 1.5 1.5S16.33 14 15.5 14H13v5h2a1 1 0 1 1 0 2H9a1 1 0 1 1 0-2h2v-5H8.5c-.83 0-1.5-.67-1.5-1.5S7.67 11 8.5 11h2.9V8.94C10.03 8.66 9 7.45 9 6c0-1.66 1.34-3 3-3Z'],
-                            ['title' => 'Boxing Ring', 'desc' => 'Trang bị đầy đủ, phù hợp cho tập luyện đối kháng chuyên sâu.', 'icon' => 'M7 6h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v8h10V8H7Zm2 2h6v2H9v-2Z'],
-                            ['title' => 'Hồ Bơi 4 Mùa', 'desc' => 'Hồ bơi trong nhà điều chỉnh nhiệt độ, an toàn và sạch sẽ.', 'icon' => 'M4 14c1.6 0 2.4-1 3.2-1 .8 0 1.6 1 3.2 1s2.4-1 3.2-1c.8 0 1.6 1 3.2 1s2.4-1 3.2-1a1 1 0 1 1 0 2c-1.6 0-2.4 1-3.2 1s-1.6-1-3.2-1-2.4 1-3.2 1-1.6-1-3.2-1-1.6 1-3.2 1a1 1 0 1 1 0-2Z'],
-                            ];
-                            @endphp
-
-                            @foreach ($areas as $area)
-                            <article class="card-glow rounded-2xl border border-white bg-white p-5 transition hover:-translate-y-1">
-                                <div class="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-[var(--brand)]">
-                                    <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current" aria-hidden="true">
-                                        <path d="{{ $area['icon'] }}"></path>
-                                    </svg>
-                                </div>
-                                <h3 class="text-lg font-extrabold text-slate-900">{{ $area['title'] }}</h3>
-                                <p class="mt-2 text-sm leading-6 text-slate-500">{{ $area['desc'] }}</p>
-                            </article>
-                            @endforeach
-                        </div>
+            <section id="pricing">
+                <div class="section-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Gói Tập Ưu Đãi</h2>
+                        <p class="section-subtitle">Lựa chọn gói tập phù hợp với mục tiêu của bạn</p>
                     </div>
-                </div>
 
-                <div id="offers" class="bg-white px-6 py-14 sm:px-10 lg:px-16">
-                    <div class="mx-auto max-w-6xl">
-                        <div class="text-center">
-                            <h2 class="section-title text-3xl font-extrabold text-[var(--brand)]">Gói Tập Ưu Đãi</h2>
-                            <p class="mt-3 text-sm text-[var(--muted)]">Lựa chọn gói tập phù hợp với mục tiêu của bạn.</p>
+                    <div class="grid-pricing">
+                        <div class="pricing-card">
+                            <h3 class="pricing-name">Cơ Bản</h3>
+                            <div class="pricing-price">500k</div>
+                            <div class="pricing-period">/tháng</div>
+                            <ul class="pricing-features">
+                                <li>Sử dụng khu vực Gym</li>
+                                <li>Lớp tập Yoga cơ bản</li>
+                                <li>Gửi xe miễn phí</li>
+                            </ul>
+                            @if(!auth()->check())
+                            <a href="{{ route('login') }}" class="pricing-btn">Chọn Gói</a>
+                            @else
+                            <button class="pricing-btn" disabled>Đã Đăng Nhập</button>
+                            @endif
                         </div>
 
-                        <div class="mt-10 grid gap-6 lg:grid-cols-3">
-                            <article class="card-glow rounded-[28px] border border-slate-200 bg-white p-7">
-                                <p class="text-lg font-bold text-slate-900">Cơ Bản</p>
-                                <div class="mt-4 flex items-end gap-1">
-                                    <span class="text-4xl font-extrabold text-slate-900">500k</span>
-                                    <span class="pb-1 text-sm font-semibold text-slate-500">/tháng</span>
-                                </div>
-                                <ul class="mt-6 space-y-3 text-sm text-slate-600">
-                                    <li>• Sử dụng khu vực Gym</li>
-                                    <li>• Tham gia lớp tập Yoga cơ bản</li>
-                                    <li>• Gửi xe miễn phí</li>
-                                </ul>
-                                <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-xl border border-[var(--brand)] px-5 py-3 text-sm font-bold text-[var(--brand)] transition hover:bg-blue-50">Chọn gói này</a>
-                            </article>
+                        <div class="pricing-card featured">
+                            <div class="pricing-badge">Bán Chạy Nhất</div>
+                            <h3 class="pricing-name">Nâng Cao</h3>
+                            <div class="pricing-price">800k</div>
+                            <div class="pricing-period">/tháng</div>
+                            <ul class="pricing-features">
+                                <li>Toàn quyền Gym & Boxing</li>
+                                <li>Lớp Yoga & Group X</li>
+                                <li>Khăn tắm miễn phí</li>
+                                <li>1 buổi PT định hướng</li>
+                            </ul>
+                            @if(!auth()->check())
+                            <a href="{{ route('login') }}" class="pricing-btn">Chọn Gói</a>
+                            @else
+                            <button class="pricing-btn" disabled>Đã Đăng Nhập</button>
+                            @endif
+                        </div>
 
-                            <article class="card-glow relative rounded-[28px] border-2 border-[var(--brand)] bg-white p-7">
-                                <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[var(--brand)] px-4 py-1 text-xs font-bold uppercase tracking-[0.24em] text-white">Bán chạy nhất</span>
-                                <p class="text-lg font-bold text-slate-900">Nâng Cao</p>
-                                <div class="mt-4 flex items-end gap-1">
-                                    <span class="text-4xl font-extrabold text-[var(--brand)]">800k</span>
-                                    <span class="pb-1 text-sm font-semibold text-slate-500">/tháng</span>
-                                </div>
-                                <ul class="mt-6 space-y-3 text-sm text-slate-600">
-                                    <li>• Toàn quyền sử dụng Gym & Boxing</li>
-                                    <li>• Tất cả lớp tập Yoga & Group X</li>
-                                    <li>• Khăn tắm miễn phí</li>
-                                    <li>• 1 buổi PT định hướng</li>
-                                </ul>
-                                <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--brand-strong)]">Chọn gói này</a>
-                            </article>
-
-                            <article class="card-glow rounded-[28px] border border-orange-200 bg-white p-7">
-                                <p class="text-lg font-bold text-slate-900">Premium</p>
-                                <div class="mt-4 flex items-end gap-1">
-                                    <span class="text-4xl font-extrabold text-[var(--accent)]">1.2M</span>
-                                    <span class="pb-1 text-sm font-semibold text-slate-500">/tháng</span>
-                                </div>
-                                <ul class="mt-6 space-y-3 text-sm text-slate-600">
-                                    <li>• Full quyền truy cập mọi khu vực</li>
-                                    <li>• 10 buổi PT hằng tháng</li>
-                                    <li>• Nước uống tháo tác miễn phí</li>
-                                    <li>• Đăng ký bảo hộ riêng</li>
-                                </ul>
-                                <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-xl border border-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent)] transition hover:bg-orange-50">Chọn gói này</a>
-                            </article>
+                        <div class="pricing-card">
+                            <h3 class="pricing-name">Premium</h3>
+                            <div class="pricing-price">1.2M</div>
+                            <div class="pricing-period">/tháng</div>
+                            <ul class="pricing-features">
+                                <li>Full quyền mọi khu vực</li>
+                                <li>10 buổi PT/tháng</li>
+                                <li>Nước uống miễn phí</li>
+                                <li>Đăng ký bảo hộ riêng</li>
+                            </ul>
+                            @if(!auth()->check())
+                            <a href="{{ route('login') }}" class="pricing-btn">Chọn Gói</a>
+                            @else
+                            <button class="pricing-btn" disabled>Đã Đăng Nhập</button>
+                            @endif
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer id="contact" class="mt-4 rounded-2xl bg-[#23262f] px-6 py-8 text-slate-200 shadow-[0_20px_50px_rgba(15,23,42,0.18)] sm:px-10 lg:px-14">
-            <div class="grid gap-10 md:grid-cols-3 md:gap-8">
-                <div>
-                    <h3 class="text-lg font-extrabold tracking-[0.18em] text-white">IRON CORE GYM</h3>
-                    <p class="mt-4 max-w-sm text-sm leading-7 text-slate-400">
-                        Hệ thống phòng tập cao cấp, mang đến trải nghiệm luyện tập hiện đại, chuyên nghiệp và bền vững cho cộng đồng.
-                    </p>
+        <footer id="contact">
+            <div class="footer-container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h3>IRON CORE GYM</h3>
+                        <p>Hệ thống phòng tập cao cấp, mang đến trải nghiệm luyện tập hiện đại, chuyên nghiệp và bền vững cho cộng đồng.</p>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Liên Hệ</h3>
+                        <ul>
+                            <li>📍 175 Tây Sơn, Kim Liên, Hà Nội</li>
+                            <li>📞 0123.456.789</li>
+                            <li>📧 contact@ironcore.vn</li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Truy Cập</h3>
+                        <ul>
+                            <li><a href="{{ route('login') }}">Đăng Nhập</a></li>
+                            <li><a href="#services">Dịch Vụ</a></li>
+                            <li><a href="#pricing">Gói Tập</a></li>
+                        </ul>
+                    </div>
                 </div>
-
-                <div>
-                    <h4 class="text-base font-bold text-white">Liên hệ</h4>
-                    <ul class="mt-4 space-y-3 text-sm text-slate-400">
-                        <li>175 Tây Sơn, Kim Liên, Hà Nội</li>
-                        <li>0123.456.789</li>
-                        <li>contact@ironcore.vn</li>
-                    </ul>
-                </div>
-
-                <div class="md:text-right">
-                    @if (Route::has('login'))
-                    <a href="{{ route('login') }}" class="inline-flex rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--brand-strong)]">Đăng nhập hội viên</a>
-                    @endif
-                    <p class="mt-4 text-xs text-slate-500">© 2024 Iron Core Gym. All rights reserved.</p>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Iron Core Gym. All rights reserved.</p>
                 </div>
             </div>
         </footer>
     </div>
 </body>
-
 </html>
