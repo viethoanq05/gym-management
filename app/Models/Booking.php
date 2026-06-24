@@ -40,7 +40,8 @@ class Booking extends Model
     public function canBeCancelled(): bool
     {
         // Tạo datetime đầy đủ từ booking_date + start_time
-        $bookingDateTime = Carbon::parse($this->booking_date . ' ' . $this->start_time);
+        // Format booking_date as string to avoid double time specification
+        $bookingDateTime = Carbon::parse($this->booking_date->format('Y-m-d') . ' ' . $this->start_time);
         $now = now();
 
         // Tính số giờ còn lại cho tới booking
