@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\Trainer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Testing\Fluent\Concerns\Has;
+use Carbon\Carbon;
 
 class Booking extends Model
 {
@@ -23,14 +24,14 @@ class Booking extends Model
         'start_time',
         'end_time',
         'status',
+        'cancellation_hours_before',
+        'cancelled_at',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'booking_date' => 'date',
-        ];
-    }
+    protected $casts = [
+        'booking_date' => 'date',
+        'cancelled_at' => 'datetime',
+    ];
 
     public function member(): BelongsTo
     {
@@ -41,5 +42,18 @@ class Booking extends Model
     {
         return $this->belongsTo(Trainer::class);
     }
+
+    public function canBeCancelled(): bool
+    {
+        // Tạo datetime đầy đủ từ booking_date + start_time
+        // Format booking_date as string to avoid double time specification
+        $bookingDateTime = Carbon::parse($this->booking_date->format('Y-m-d') . ' ' . $this->start_time);
+        $now = now();
+
+        // Tính số giờ còn lại cho tới booking
+        $hoursUntilBooking = $now->diffInHours($bookingDateTime, false);
+
+        // Có thể hủy nếu còn lại >= số giờ yêu cầu
+        return $hoursUntilBooking >= $this->cancellation_hours_before;
+    }
 }
-    

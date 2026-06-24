@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\User;
 
 class Trainer extends Model
 {
@@ -30,5 +32,27 @@ class Trainer extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function points(): HasMany
+    {
+        return $this->hasMany(TrainerPoint::class);
+    }
+
+    public function getTotalPointsAttribute(): int
+    {
+        $bonus = $this->points()->where('type', 'bonus')->sum('points');
+        $penalty = $this->points()->where('type', 'penalty')->sum('points');
+        return $bonus - $penalty;
+    }
+
+    public function getTotalTeachingHoursAttribute(): float
+    {
+        return $this->bookings()
+            ->where('status', 1) // confirmed
+            ->get()
+            ->sum(function ($booking) {
+                return (strtotime($booking->end_time) - strtotime($booking->start_time)) / 3600;
+            });
     }
 }

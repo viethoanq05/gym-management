@@ -9,15 +9,19 @@ use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberMembershipController;
 use App\Http\Controllers\Member\MemberProfileController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\Trainer\DashboardController as TrainerDashboardController;
+use App\Http\Controllers\Trainer\ScheduleController;
+use App\Http\Controllers\Trainer\MemberStatusController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 Route::get('/', [HomeController::class, 'index']);
 
 // Authentication routes (simple custom handlers)
-use App\Http\Controllers\Admin\DashboardController;
+
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->middleware(['auth', 'check_role:admin'])
     ->name('admin.dashboard');
 
@@ -36,8 +40,8 @@ Route::prefix('member')->name('member.')->group(function () {
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/dashboard/data', [DashboardController::class, 'getDashboardData'])->name('admin.dashboard.data');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard/data', [AdminDashboardController::class, 'getDashboardData'])->name('admin.dashboard.data');
 
     // Admin resources for members, staff, trainers
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -53,9 +57,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:trainer'])->group(function () {
-    Route::get('/trainer/dashboard', function () {
-        return view('trainer.dashboard');
-    })->name('trainer.dashboard');
+    // Dashboard
+    Route::get('/trainer/dashboard', [TrainerDashboardController::class, 'index'])->name('trainer.dashboard');
+
+    // Lịch làm việc
+    Route::prefix('/trainer/schedule')->name('trainer.schedule.')->group(function () {
+        Route::get('/', [ScheduleController::class, 'index'])->name('index');
+        Route::get('/bookings', [ScheduleController::class, 'bookings'])->name('bookings');
+        Route::post('/accept/{booking}', [ScheduleController::class, 'acceptBooking'])->name('accept');
+        Route::post('/cancel/{booking}', [ScheduleController::class, 'cancelBooking'])->name('cancel');
+    });
+
+    // Theo dõi thể trạng hội viên
+    Route::prefix('/trainer/members')->name('trainer.members.')->group(function () {
+        Route::get('/', [MemberStatusController::class, 'index'])->name('index');
+        Route::get('/{member}', [MemberStatusController::class, 'show'])->name('show');
+        Route::post('/{member}/note', [MemberStatusController::class, 'addNote'])->name('addNote');
+    });
 });
 
 Route::middleware(['auth', 'role:member'])->group(function () {
