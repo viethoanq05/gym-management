@@ -56,7 +56,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700">Ngày sinh</label>
-                    <input type="date" name="dob" value="{{ old('dob', optional($user->member)->dob) }}" class="mt-1 w-full border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm @error('dob') border-red-500 bg-red-50 @enderror" />
+                    <input type="date" name="dob" value="{{ old('dob', optional($user->member)->dob ? optional($user->member)->dob->format('Y-m-d') : '') }}" class="mt-1 w-full border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm @error('dob') border-red-500 bg-red-50 @enderror" />
                     @error('dob') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
 
@@ -75,7 +75,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700">Ngày tham gia</label>
-                    <input type="date" name="join_date" value="{{ old('join_date', optional($user->member)->join_date) }}" class="mt-1 w-full border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm @error('join_date') border-red-500 bg-red-50 @enderror" />
+                    <input type="date" name="join_date" value="{{ old('join_date', optional($user->member)->join_date ? optional($user->member)->join_date->format('Y-m-d') : '') }}" class="mt-1 w-full border rounded-xl px-4 py-2.5 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm @error('join_date') border-red-500 bg-red-50 @enderror" />
                     @error('join_date') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
             </div>

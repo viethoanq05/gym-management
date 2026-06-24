@@ -31,7 +31,11 @@
                         <td class="py-3">{{ $member->name }}</td>
                         <td class="py-3">{{ $member->email }}</td>
                         <td class="py-3">{{ $member->phone }}</td>
-                        <td class="py-3">{{ optional($member->member)->join_date ?? $member->created_at->format('Y-m-d') }}</td>
+                        <td class="py-3">
+                            {{ optional($member->member)->join_date
+                                ? optional($member->member)->join_date->format('Y-m-d')
+                                : $member->created_at->format('Y-m-d') }}
+                        </td>
                         <td class="py-3">
                             <a href="{{ route('admin.members.edit', $member->id) }}" class="text-sm text-blue-600 mr-3">Sửa</a>
                             <form action="{{ route('admin.members.destroy', $member->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Bạn có chắc chắn muốn xoá hội viên này?');">
