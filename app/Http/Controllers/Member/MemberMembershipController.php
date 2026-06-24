@@ -45,7 +45,7 @@ class MemberMembershipController extends Controller
         $member = Auth::user()?->member;
 
         if (! $member) {
-            abort(403, 'Tai khoan khong phai hoi vien.');
+            abort(403, 'Tài khoản không phải hội viên.');
         }
 
         $memberships = $member->memberships()
@@ -65,7 +65,7 @@ class MemberMembershipController extends Controller
         $member = Auth::user()?->member;
 
         if (! $member) {
-            abort(403, 'Tai khoan khong phai hoi vien.');
+            abort(403, 'Tài khoản không phải hội viên.');
         }
 
         $package = Package::query()
@@ -81,7 +81,7 @@ class MemberMembershipController extends Controller
             'status' => Membership::WAITING_PAYMENT,
         ]);
 
-        return back()->with('success', 'Dang ky goi tap thanh cong.');
+        return back()->with('success', 'Đăng ký gói tập thành công.');
     }
 
     public function cancel(int $membershipId): RedirectResponse
@@ -89,12 +89,12 @@ class MemberMembershipController extends Controller
         $member = Auth::user()?->member;
 
         if (! $member) {
-            abort(403, 'Tai khoan khong phai hoi vien.');
+            abort(403, 'Tài khoản không phải hội viên.');
         }
 
         $membership = $member->memberships()->findOrFail($membershipId);
         $membership->update(['status' => Membership::CANCELLED]);
 
-        return back()->with('success', 'Da huy goi tap.');
+        return back()->with('success', 'Đã hủy gói tập.');
     }
 }

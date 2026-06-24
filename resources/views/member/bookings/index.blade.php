@@ -9,7 +9,6 @@
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
     <div>
         <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Danh sách lịch hẹn PT</h1>
-        <p class="text-slate-500 font-medium mt-1">Quản lý và đặt các buổi tập luyện cá nhân cùng Huấn luyện viên.</p>
     </div>
     
     <div>

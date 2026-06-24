@@ -8,7 +8,6 @@
 <!-- Header Banner -->
 <div class="mb-8">
     <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Lịch sử đăng ký gói tập</h1>
-    <p class="text-slate-500 font-medium mt-1">Theo dõi danh sách các gói tập bạn đã đăng ký và trạng thái thanh toán.</p>
 </div>
 
 <!-- History Table Card -->

@@ -100,7 +100,7 @@
                             Trải nghiệm không gian tập luyện hiện đại, huấn luyện chuyên nghiệp và lộ trình cá nhân hóa giúp bạn bứt phá mỗi ngày.
                         </p>
                         <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                            <a href="#offers" class="rounded-xl bg-[var(--accent)] px-7 py-3 text-sm font-extrabold text-white shadow-lg shadow-orange-500/25 transition hover:-translate-y-0.5 hover:bg-[#eb6a10]">Đăng ký ngay</a>
+                            <a href="{{ route('member.register.form') }}" class="rounded-xl bg-[var(--accent)] px-7 py-3 text-sm font-extrabold text-white shadow-lg shadow-orange-500/25 transition hover:-translate-y-0.5 hover:bg-[#eb6a10]">Đăng ký ngay</a>
                             <a href="#services" class="rounded-xl border border-white/30 bg-white/10 px-7 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20">Khám phá</a>
                         </div>
                     </div>

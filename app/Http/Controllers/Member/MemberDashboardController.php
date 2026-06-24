@@ -15,7 +15,7 @@ class MemberDashboardController extends Controller
         $member = Auth::user()?->member;
 
         if (! $member) {
-            abort(403, 'Tai khoan khong phai hoi vien.');
+            abort(403, 'Tài khoản không phải hội viên.');
         }
 
         $activeMembership = $member->memberships()
@@ -33,7 +33,12 @@ class MemberDashboardController extends Controller
             ->take(5)
             ->get();
 
-        $targetWeight = round(($member->gender === 'male' ? ($member->height - 100) * 0.9 : ($member->height - 100) * 0.85), 1);
+        // Monthly check-in count
+        $now = now();
+        $monthlyCheckinCount = \Illuminate\Support\Facades\DB::table('checkins')
+            ->where('member_id', $member->id)
+            ->whereBetween('checkin_time', [$now->copy()->startOfMonth(), $now->copy()->endOfMonth()])
+            ->count();
 
         $recentCheckins = \Illuminate\Support\Facades\DB::table('checkins')
             ->where('member_id', $member->id)
@@ -45,10 +50,8 @@ class MemberDashboardController extends Controller
             'member' => $member,
             'activeMembership' => $activeMembership,
             'upcomingBookings' => $upcomingBookings,
-            'targetWeight' => $targetWeight,
+            'monthlyCheckinCount' => $monthlyCheckinCount,
             'recentCheckins' => $recentCheckins,
         ]);
     }
 }
-
-

@@ -20,7 +20,6 @@
         <h1 class="text-2xl xl:text-3xl font-extrabold text-slate-800 tracking-tight">
             {{ $greeting }}, {{ Auth::user()->name }}!
         </h1>
-        <p class="text-slate-500 font-medium mt-1">Sẵn sàng để phá vỡ giới hạn hôm nay chưa?</p>
     </div>
     
     <div>
@@ -109,23 +108,20 @@
         <!-- Inner Grid: Weight target & Recent activity -->
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             
-            <!-- Weight Target Card -->
+            <!-- Monthly Training Stats Card -->
             <div class="bg-white rounded-2xl border border-slate-100 p-4 xl:p-5 md:col-span-2 shadow-sm flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-4">
                     <span class="bg-orange-50 text-orange-500 p-2 rounded-xl">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
                         </svg>
                     </span>
-                    <h3 class="text-sm font-bold text-slate-700">Mục tiêu cân nặng</h3>
+                    <h3 class="text-sm font-bold text-slate-700">Thống kê tháng {{ now()->month }}</h3>
                 </div>
 
                 @php
-                    $weightDiff = abs($member->weight - $targetWeight);
-                    $weightProgress = $weightDiff == 0 ? 100 : max(10, min(95, round(100 - ($weightDiff / $member->weight) * 300)));
-                    if ($weightProgress == 95 && $weightDiff < 1) {
-                        $weightProgress = 98;
-                    }
+                    $daysInMonth = now()->daysInMonth;
+                    $checkinPct = $daysInMonth > 0 ? min(100, round(($monthlyCheckinCount / $daysInMonth) * 100)) : 0;
                 @endphp
 
                 <!-- Circle Progress Gauge -->
@@ -136,23 +132,19 @@
                         <!-- Active Circle -->
                         <circle cx="64" cy="64" r="50" stroke="#ff7a1a" stroke-width="10" fill="transparent"
                                 stroke-dasharray="314.16"
-                                stroke-dashoffset="{{ 314.16 - (314.16 * $weightProgress / 100) }}"
+                                stroke-dashoffset="{{ 314.16 - (314.16 * $checkinPct / 100) }}"
                                 stroke-linecap="round" />
                     </svg>
                     <div class="absolute text-center">
-                        <span class="text-xl xl:text-2xl font-extrabold text-slate-800">{{ $weightProgress }}%</span>
+                        <span class="text-2xl xl:text-3xl font-extrabold text-slate-800">{{ $monthlyCheckinCount }}</span>
+                        <div class="text-[10px] font-bold text-slate-400 -mt-0.5">buổi tập</div>
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mt-1.5 border-t border-slate-50 pt-3">
-                    <div class="text-left">
-                        <div>Hiện tại</div>
-                        <div class="text-sm font-extrabold text-slate-700 mt-0.5">{{ $member->weight }} kg</div>
-                    </div>
-                    <div class="w-px h-8 bg-slate-100"></div>
-                    <div class="text-right">
-                        <div>Mục tiêu</div>
-                        <div class="text-sm font-extrabold text-slate-700 mt-0.5">{{ $targetWeight }} kg</div>
+                <div class="flex justify-center items-center text-xs font-semibold text-slate-400 mt-1.5 border-t border-slate-50 pt-3">
+                    <div class="text-center">
+                        <div>Đã check-in</div>
+                        <div class="text-sm font-extrabold text-slate-700 mt-0.5">{{ $monthlyCheckinCount }} / {{ $daysInMonth }} ngày</div>
                     </div>
                 </div>
             </div>

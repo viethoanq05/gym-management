@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             TrainerSeeder::class,
             PackageSeeder::class,
             MembershipSeeder::class,
+            TrainerScheduleSeeder::class,
         ]);
     }
 }

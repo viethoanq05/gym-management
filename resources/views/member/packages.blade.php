@@ -8,7 +8,7 @@
 <!-- Header Banner -->
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
     <h1 class="text-2xl xl:text-3xl font-extrabold text-slate-800 tracking-tight">Chọn gói tập của bạn</h1>
-    <p class="text-slate-500 font-medium mt-1">Lựa chọn lộ trình phù hợp nhất với mục tiêu tập luyện của bạn.</p>
+    <p class="text-slate-500 font-medium mt-1">Lựa chọn gói tập phù hợp nhất với mục tiêu tập luyện của bạn.</p>
 </div>
 
 <!-- Active Membership Alert -->

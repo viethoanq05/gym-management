@@ -7,6 +7,7 @@ use App\Http\Controllers\Member\MemberAuthController;
 use App\Http\Controllers\Member\MemberBookingController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberMembershipController;
+use App\Http\Controllers\Member\MemberProfileController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -45,8 +46,11 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 
     Route::get('/member/bookings', [MemberBookingController::class, 'index'])->name('member.bookings.index');
     Route::get('/member/bookings/create', [MemberBookingController::class, 'create'])->name('member.bookings.create');
+    Route::get('/member/bookings/trainer-availability', [MemberBookingController::class, 'getTrainerAvailability'])->name('member.bookings.trainer-availability');
     Route::post('/member/bookings', [MemberBookingController::class, 'store'])->name('member.bookings.store');
     Route::patch('/member/bookings/{bookingId}/cancel', [MemberBookingController::class, 'cancel'])->name('member.bookings.cancel');
+
+    Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
 });
 
 Route::middleware(['auth', 'role:staff'])->group(function () {

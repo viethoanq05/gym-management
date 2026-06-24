@@ -47,7 +47,15 @@
                     <label class="mb-1 block text-sm font-medium text-slate-600">Mật khẩu</label>
                     <div class="relative">
                         <input name="password" type="password" required class="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand,#1662ff)]" placeholder="••••••••">
-                        <button type="button" class="absolute right-2 top-2 text-slate-400" onclick="(this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password')">👁️</button>
+                        <button type="button" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition" onclick="
+                            const input = this.previousElementSibling;
+                            input.type = input.type === 'password' ? 'text' : 'password';
+                        ">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4.5 h-4.5">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
                     </div>
                     @error('password') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                 </div>
@@ -67,7 +75,7 @@
 
                 
 
-                <p class="mt-4 text-center text-sm text-slate-500">Chưa có tài khoản? <a href="#" class="text-[var(--brand,#1662ff)]">Đăng ký tài khoản mới</a></p>
+                <p class="mt-4 text-center text-sm text-slate-500">Chưa có tài khoản? <a href="{{ route('member.register.form') }}" class="text-[var(--brand,#1662ff)]">Đăng ký tài khoản mới</a></p>
             </form>
         </div>
     </div>
