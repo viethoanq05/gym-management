@@ -12,6 +12,14 @@ use App\Http\Controllers\Member\MemberProfileController;
 Route::get('/', [HomeController::class, 'index']);
 
 // Authentication routes (simple custom handlers)
+use App\Http\Controllers\Admin\DashboardController;
+
+Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'check_role:admin'])
+    ->name('admin.dashboard');
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -23,10 +31,22 @@ Route::prefix('member')->name('member.')->group(function () {
     });
 });
 
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard/data', [DashboardController::class, 'getDashboardData'])->name('admin.dashboard.data');
+
+    // Admin resources for members, staff, trainers
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('members', App\Http\Controllers\Admin\MemberController::class);
+        Route::resource('staff', App\Http\Controllers\Admin\StaffController::class);
+        Route::resource('trainers', App\Http\Controllers\Admin\TrainerController::class);
+        Route::resource('packages', App\Http\Controllers\Admin\PackageController::class);
+        Route::get('reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/export', [App\Http\Controllers\Admin\ReportController::class, 'export'])->name('reports.export');
+        Route::resource('bookings', App\Http\Controllers\Admin\BookingController::class);
+        Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
+    });
 });
 
 
@@ -51,6 +71,7 @@ Route::middleware(['auth', 'role:member'])->group(function () {
     Route::patch('/member/bookings/{bookingId}/cancel', [MemberBookingController::class, 'cancel'])->name('member.bookings.cancel');
 
     Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+    Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
 });
 
 Route::middleware(['auth', 'role:staff'])->group(function () {

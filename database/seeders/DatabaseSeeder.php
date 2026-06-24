@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
@@ -25,6 +24,11 @@ class DatabaseSeeder extends Seeder
             PackageSeeder::class,
             MembershipSeeder::class,
             TrainerScheduleSeeder::class,
+            MemberSeeder::class,
+            MembershipSeeder::class,
+            PaymentSeeder::class,
+            CheckinSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }

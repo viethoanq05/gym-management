@@ -5,7 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -52,12 +51,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function member(): HasOne
+    /**
+     * Quan hệ 1-1 tới bảng members (thông tin thể chất của member)
+     */
+    public function member()
     {
         return $this->hasOne(Member::class);
     }
 
-    public function trainer(): HasOne
+    /**
+     * Quan hệ 1-1 tới bảng trainers (thông tin PT của trainer)
+     */
+    public function trainer()
     {
         return $this->hasOne(Trainer::class);
     }
