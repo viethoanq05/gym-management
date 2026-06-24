@@ -12,6 +12,7 @@ class Membership extends Model
     public const WAITING_PAYMENT = 2;
     public const CANCELLED = 3;
 
+    protected $table = 'memberships';
     protected $fillable = [
         'member_id',
         'package_id',

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Member;
 use App\Models\Trainer;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 class Booking extends Model
 {
@@ -13,6 +15,7 @@ class Booking extends Model
     public const CONFIRMED = 1;
     public const PENDING = 2;
 
+    use HasFactory;
     protected $fillable = [
         'member_id',
         'trainer_id',
@@ -39,3 +42,4 @@ class Booking extends Model
         return $this->belongsTo(Trainer::class);
     }
 }
+    

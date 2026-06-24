@@ -8,6 +8,7 @@ use App\Http\Controllers\Member\MemberBookingController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberMembershipController;
 use App\Http\Controllers\Member\MemberProfileController;
+use App\Http\Controllers\Staff\StaffController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -19,6 +20,8 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'check_role:admin'])
     ->name('admin.dashboard');
+
+
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
@@ -49,7 +52,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 });
 
-
 Route::middleware(['auth', 'role:trainer'])->group(function () {
     Route::get('/trainer/dashboard', function () {
         return view('trainer.dashboard');
@@ -75,7 +77,32 @@ Route::middleware(['auth', 'role:member'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:staff'])->group(function () {
+    
     Route::get('/staff/dashboard', function () {
         return view('staff.dashboard');
     })->name('staff.dashboard');
+
+    // --- MEMBER MANAGEMENT MODULE ---
+    Route::get('/staff/members/create', [StaffController::class, 'createMember'])->name('staff.members.create');
+    Route::post('/staff/members', [StaffController::class, 'storeMember'])->name('staff.members.store');
+
+    // --- CHECK-IN / CHECK-OUT MODULE ---
+    Route::get('/staff/check-in', [StaffController::class, 'showCheckIn'])->name('staff.checkin');
+    Route::post('/staff/check-in/search', [StaffController::class, 'searchMember'])->name('staff.search');
+    Route::post('/staff/check-in/{id}/confirm', [StaffController::class, 'storeCheckIn'])->name('staff.checkin.confirm');
+    Route::post('/staff/check-in/{id}/out', [StaffController::class, 'checkoutMember'])->name('staff.checkin.out');
+
+    // --- SCHEDULES MODULE ---
+    Route::get('/staff/schedules', [StaffController::class, 'showSchedules'])->name('staff.schedules');
+    Route::post('/staff/schedules/{id}/confirm', [StaffController::class, 'confirmSchedule'])->name('staff.schedules.confirm');
+
+    // --- MEMBERSHIPS MODULE ---
+    Route::get('/staff/memberships', [StaffController::class, 'showMemberships'])->name('staff.memberships');
+    Route::get('/staff/memberships/assign', [StaffController::class, 'assignMembership'])->name('staff.memberships.assign');
+    Route::post('/staff/memberships/assign', [StaffController::class, 'storeAssignedMembership'])->name('staff.memberships.assign.store');
+    Route::post('/staff/memberships/{id}/confirm', [StaffController::class, 'confirmMembership'])->name('staff.memberships.confirm');
+    Route::post('/staff/memberships/{id}/reject', [StaffController::class, 'rejectMembership'])->name('staff.memberships.reject');
+    Route::post('/staff/memberships/{id}/freeze', [StaffController::class, 'freezeMembership'])->name('staff.memberships.freeze');
+    Route::post('/staff/memberships/{id}/unfreeze', [StaffController::class, 'unfreezeMembership'])->name('staff.memberships.unfreeze');
+    Route::post('/staff/memberships/{id}/cancel', [StaffController::class, 'cancelMembership'])->name('staff.memberships.cancel');
 });
