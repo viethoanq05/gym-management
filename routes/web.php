@@ -51,6 +51,8 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
 
     // --- MEMBERSHIPS MODULE ---
     Route::get('/staff/memberships', [StaffController::class, 'showMemberships'])->name('staff.memberships');
+    Route::get('/staff/memberships/assign', [StaffController::class, 'assignMembership'])->name('staff.memberships.assign');
+    Route::post('/staff/memberships/assign', [StaffController::class, 'storeAssignedMembership'])->name('staff.memberships.assign.store');
     Route::post('/staff/memberships/{id}/confirm', [StaffController::class, 'confirmMembership'])->name('staff.memberships.confirm');
     Route::post('/staff/memberships/{id}/reject', [StaffController::class, 'rejectMembership'])->name('staff.memberships.reject');
     Route::post('/staff/memberships/{id}/freeze', [StaffController::class, 'freezeMembership'])->name('staff.memberships.freeze');
