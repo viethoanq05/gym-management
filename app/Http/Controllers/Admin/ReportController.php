@@ -86,8 +86,8 @@ class ReportController extends Controller
             : Carbon::now()->startOfMonth()->toDateString();
 
         $endDate = $request->filled('end_date')
-            ? Carbon::parse($request->end_date)->endOfDay()->toDateString()
-            : Carbon::now()->toDateString();
+            ? Carbon::parse($request->end_date)->endOfDay()->toDateTimeString()
+            : Carbon::now()->endOfDay()->toDateTimeString();
 
         return Excel::download(new RevenueExport($startDate, $endDate), 'Bao_cao_doanh_thu.xlsx');
     }

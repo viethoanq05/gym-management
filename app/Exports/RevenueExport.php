@@ -27,7 +27,7 @@ class RevenueExport implements FromCollection, WithHeadings, WithMapping, Should
     public function collection()
     {
         $start = $this->startDate ?? Carbon::today()->startOfMonth()->toDateString();
-        $end = $this->endDate ?? Carbon::today()->toDateString();
+        $end = $this->endDate ?? Carbon::today()->endOfDay()->toDateTimeString();
 
         // payments -> memberships -> members -> users ; packages via memberships.package_id
         $rows = DB::table('payments')
