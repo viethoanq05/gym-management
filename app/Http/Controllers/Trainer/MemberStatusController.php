@@ -23,7 +23,7 @@ class MemberStatusController extends Controller
 
         // Lấy danh sách hội viên mà trainer đã làm việc
         $memberIds = $trainer->bookings()
-            ->where('status', 1) // confirmed bookings
+            ->whereIn('status', [1, 3]) // confirmed or completed bookings
             ->distinct()
             ->pluck('member_id');
 
@@ -49,7 +49,7 @@ class MemberStatusController extends Controller
         // Kiểm tra xem trainer có công việc với hội viên này không
         $hasBooking = $trainer->bookings()
             ->where('member_id', $member->id)
-            ->where('status', 1)
+            ->whereIn('status', [1, 3])
             ->exists();
 
         if (!$hasBooking) {
@@ -104,7 +104,7 @@ class MemberStatusController extends Controller
         // Kiểm tra xem trainer có công việc với hội viên này không
         $hasBooking = $trainer->bookings()
             ->where('member_id', $member->id)
-            ->where('status', 1)
+            ->whereIn('status', [1, 3])
             ->exists();
 
         if (!$hasBooking) {

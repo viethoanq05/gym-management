@@ -78,7 +78,7 @@ class MemberBookingController extends Controller
         $trainerOverlap = Booking::query()
             ->where('trainer_id', $data['trainer_id'])
             ->whereDate('booking_date', $data['booking_date'])
-            ->whereIn('status', [Booking::PENDING, Booking::CONFIRMED])
+            ->whereIn('status', [Booking::PENDING, Booking::CONFIRMED, Booking::COMPLETED])
             ->where(function ($query) use ($data): void {
                 $query->where('start_time', '<', $data['end_time'])
                     ->where('end_time', '>', $data['start_time']);
@@ -153,7 +153,7 @@ class MemberBookingController extends Controller
         $bookedSlots = Booking::query()
             ->where('trainer_id', $trainerId)
             ->whereDate('booking_date', $date)
-            ->whereIn('status', [Booking::PENDING, Booking::CONFIRMED])
+            ->whereIn('status', [Booking::PENDING, Booking::CONFIRMED, Booking::COMPLETED])
             ->orderBy('start_time')
             ->get(['start_time', 'end_time', 'status']);
 
@@ -165,7 +165,7 @@ class MemberBookingController extends Controller
             'booked' => $bookedSlots->map(fn ($b) => [
                 'start' => substr($b->start_time, 0, 5),
                 'end' => substr($b->end_time, 0, 5),
-                'status' => $b->status === Booking::PENDING ? 'pending' : 'confirmed',
+                'status' => $b->status === Booking::PENDING ? 'pending' : ($b->status === Booking::COMPLETED ? 'completed' : 'confirmed'),
             ]),
         ]);
     }

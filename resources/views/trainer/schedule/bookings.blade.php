@@ -135,6 +135,8 @@
                                         <td>
                                             @if($booking->status == 1)
                                                 <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success-color); padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-weight: 600;">✓ Xác nhận</span>
+                                            @elseif($booking->status == 3)
+                                                <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-weight: 600;">✓ Đã hoàn thành</span>
                                             @elseif($booking->status == 0)
                                                 <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: var(--danger-color); padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-weight: 600;">✗ Hủy</span>
                                             @else
@@ -162,6 +164,10 @@
                                                         <i class="fas fa-times"></i> Hủy
                                                     </button>
                                                 </form>
+                                                <a href="{{ route('trainer.members.show', $booking->member_id) }}" class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+                                                    <i class="fas fa-eye"></i> Xem
+                                                </a>
+                                            @elseif($booking->status == 3)
                                                 <a href="{{ route('trainer.members.show', $booking->member_id) }}" class="btn btn-primary" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                                                     <i class="fas fa-eye"></i> Xem
                                                 </a>

@@ -15,6 +15,7 @@ class Booking extends Model
     public const CANCELLED = 0;
     public const CONFIRMED = 1;
     public const PENDING = 2;
+    public const COMPLETED = 3;
 
     use HasFactory;
     protected $fillable = [

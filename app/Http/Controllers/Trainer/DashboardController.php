@@ -27,9 +27,9 @@ class DashboardController extends Controller
             ->distinct('member_id')
             ->count('member_id');
 
-        // Tổng số buổi dạy đã xác nhận
+        // Tổng số buổi dạy đã hoàn thành
         $totalSessions = Booking::where('trainer_id', $trainer->id)
-            ->where('status', 1) // confirmed
+            ->where('status', 3) // completed
             ->count();
 
         // Lịch tới trong 7 ngày
@@ -52,7 +52,7 @@ class DashboardController extends Controller
     private function getTotalTeachingHours(Trainer $trainer): float
     {
         $bookings = Booking::where('trainer_id', $trainer->id)
-            ->where('status', 1) // confirmed
+            ->where('status', 3) // completed
             ->get();
 
         $totalHours = 0;

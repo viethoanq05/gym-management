@@ -74,7 +74,7 @@ class StaffController extends Controller
         $booking = Booking::findOrFail($id);
         
         $booking->update([
-            'status' => 1 
+            'status' => 3 
         ]);
 
         return redirect()->back()->with('success', 'Đã xác nhận lịch tập của hội viên thành công!');

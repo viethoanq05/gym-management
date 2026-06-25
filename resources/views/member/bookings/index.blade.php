@@ -76,6 +76,10 @@
                                 <span class="bg-orange-50 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full uppercase animate-pulse">
                                     Chờ duyệt
                                 </span>
+                            @elseif($booking->status == \App\Models\Booking::COMPLETED)
+                                <span class="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full uppercase">
+                                    Đã hoàn thành
+                                </span>
                             @else
                                 <span class="bg-slate-50 text-slate-400 text-xs font-bold px-2.5 py-1 rounded-full uppercase">
                                     Đã hủy

@@ -59,8 +59,16 @@
 
                                 <td class="px-6 py-4">
                                     @if($booking->status == 1)
-                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
                                             Đã xác nhận
+                                        </span>
+                                    @elseif($booking->status == 3)
+                                        <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                                            Đã hoàn thành
+                                        </span>
+                                    @elseif($booking->status == 0)
+                                        <span class="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 ring-1 ring-inset ring-rose-600/20">
+                                            Đã hủy
                                         </span>
                                     @else
                                         <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
@@ -70,15 +78,19 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-right">
-                                    @if($booking->status != 1)
+                                    @if($booking->status == 1)
                                         <form method="POST" action="{{ route('staff.schedules.confirm', $booking->id) }}">
                                             @csrf
-                                            <button type="submit" class="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-blue-700 transition shadow-sm">
-                                                Duyệt lịch ✔
+                                            <button type="submit" class="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition shadow-sm">
+                                                Đã tập ✔
                                             </button>
                                         </form>
-                                    @else
+                                    @elseif($booking->status == 3)
                                         <span class="text-xs font-medium text-slate-400 italic">Hoàn tất</span>
+                                    @elseif($booking->status == 0)
+                                        <span class="text-xs font-medium text-slate-400 italic">Đã hủy</span>
+                                    @else
+                                        <span class="text-xs font-medium text-slate-400 italic">Chờ PT duyệt</span>
                                     @endif
                                 </td>
                                 
