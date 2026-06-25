@@ -136,13 +136,13 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="mb-1.5 block text-sm font-bold text-slate-600">Giờ bắt đầu</label>
-                <input name="start_time" id="start-time" value="{{ old('start_time') }}" type="time" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-semibold text-slate-700">
+                <input name="start_time" id="start-time" value="{{ old('start_time') }}" type="time" required lang="en-GB" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-semibold text-slate-700">
                 @error('start_time') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="mb-1.5 block text-sm font-bold text-slate-600">Giờ kết thúc</label>
-                <input name="end_time" id="end-time" value="{{ old('end_time') }}" type="time" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-semibold text-slate-700">
+                <input name="end_time" id="end-time" value="{{ old('end_time') }}" type="time" required lang="en-GB" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-semibold text-slate-700">
                 @error('end_time') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
             </div>
         </div>
