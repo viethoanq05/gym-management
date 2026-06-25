@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Trainer;
 use App\Models\Member;
 use App\Models\Booking;
-use App\Models\TrainerPoint;
 use App\Models\CheckIn;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -24,32 +23,6 @@ class TrainerDataSeeder extends Seeder
         if ($trainers->isEmpty() || $members->isEmpty()) {
             $this->command->info('Cần phải có trainer và member được tạo trước!');
             return;
-        }
-
-        // Tạo TrainerPoints
-        foreach ($trainers as $trainer) {
-            // Thêm điểm cộng
-            TrainerPoint::create([
-                'trainer_id' => $trainer->id,
-                'points' => 10,
-                'type' => 'bonus',
-                'reason' => 'Hoàn thành tháng không vắng mặt',
-            ]);
-
-            TrainerPoint::create([
-                'trainer_id' => $trainer->id,
-                'points' => 5,
-                'type' => 'bonus',
-                'reason' => 'Hội viên đạt kết quả tốt',
-            ]);
-
-            // Thêm điểm trừ
-            TrainerPoint::create([
-                'trainer_id' => $trainer->id,
-                'points' => 2,
-                'type' => 'penalty',
-                'reason' => 'Vắng mặt 1 buổi không thông báo',
-            ]);
         }
 
         // Tạo Bookings

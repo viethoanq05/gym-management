@@ -34,17 +34,6 @@ class Trainer extends Model
         return $this->hasMany(Booking::class);
     }
 
-    public function points(): HasMany
-    {
-        return $this->hasMany(TrainerPoint::class);
-    }
-
-    public function getTotalPointsAttribute(): int
-    {
-        $bonus = $this->points()->where('type', 'bonus')->sum('points');
-        $penalty = $this->points()->where('type', 'penalty')->sum('points');
-        return $bonus - $penalty;
-    }
 
     public function getTotalTeachingHoursAttribute(): float
     {

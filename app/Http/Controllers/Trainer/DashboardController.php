@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Models\Trainer;
 use App\Models\Booking;
-use App\Models\TrainerPoint;
 use App\Models\Member;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,17 +22,15 @@ class DashboardController extends Controller
         // Số giờ dạy
         $totalTeachingHours = $this->getTotalTeachingHours($trainer);
 
-        // Điểm cộng
-        $bonusPoints = TrainerPoint::where('trainer_id', $trainer->id)
-            ->where('type', 'bonus')
-            ->sum('points');
+        // Số hội viên phụ trách
+        $activeMembersCount = Booking::where('trainer_id', $trainer->id)
+            ->distinct('member_id')
+            ->count('member_id');
 
-        // Điểm trừ
-        $penaltyPoints = TrainerPoint::where('trainer_id', $trainer->id)
-            ->where('type', 'penalty')
-            ->sum('points');
-
-        $totalPoints = $bonusPoints - $penaltyPoints;
+        // Tổng số buổi dạy đã xác nhận
+        $totalSessions = Booking::where('trainer_id', $trainer->id)
+            ->where('status', 1) // confirmed
+            ->count();
 
         // Lịch tới trong 7 ngày
         $upcomingSchedules = Booking::where('trainer_id', $trainer->id)
@@ -46,9 +43,8 @@ class DashboardController extends Controller
         return view('trainer.dashboard', [
             'trainer' => $trainer,
             'totalTeachingHours' => $totalTeachingHours,
-            'bonusPoints' => $bonusPoints,
-            'penaltyPoints' => $penaltyPoints,
-            'totalPoints' => $totalPoints,
+            'activeMembersCount' => $activeMembersCount,
+            'totalSessions' => $totalSessions,
             'upcomingSchedules' => $upcomingSchedules,
         ]);
     }

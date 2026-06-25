@@ -88,59 +88,40 @@
                         </div>
                     </div>
 
-                    <!-- Bonus Points -->
+                    <!-- Active Members -->
                     <div class="metric-card">
                         <div class="metric-label">
-                            <i class="fas fa-plus-circle"></i> Điểm cộng
+                            <i class="fas fa-users"></i> Hội viên phụ trách
                         </div>
-                        <div class="metric-value" style="color: var(--success-color);">+{{ $bonusPoints }}</div>
+                        <div class="metric-value" style="color: var(--success-color);">{{ $activeMembersCount }}</div>
                         <div class="metric-change">
-                            <i class="fas fa-star"></i> Thành tích
+                            <i class="fas fa-user-check"></i> Đang hướng dẫn
                         </div>
                     </div>
 
-                    <!-- Penalty Points -->
+                    <!-- Total Sessions -->
                     <div class="metric-card">
                         <div class="metric-label">
-                            <i class="fas fa-minus-circle"></i> Điểm trừ
+                            <i class="fas fa-calendar-check"></i> Lịch dạy đã xác nhận
                         </div>
-                        <div class="metric-value" style="color: var(--danger-color);">-{{ $penaltyPoints }}</div>
-                        <div class="metric-change negative">
-                            <i class="fas fa-exclamation-circle"></i> Cần cải thiện
+                        <div class="metric-value" style="color: var(--primary-color);">{{ $totalSessions }}</div>
+                        <div class="metric-change">
+                            <i class="fas fa-check-circle"></i> Đã hoàn thành
                         </div>
                     </div>
                 </div>
 
-                <!-- TOTAL POINTS & UPCOMING SCHEDULES -->
-                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2rem;">
-                    <!-- Total Points Card -->
-                    <div class="members-card">
-                        <div class="card-header" style="border-bottom: 2px solid var(--primary-color);">
-                            <h2 class="card-title">Tổng Điểm</h2>
-                        </div>
-                        <div style="text-align: center; padding: 2rem 1rem;">
-                            <div style="font-size: 3.5rem; font-weight: 700; @if($totalPoints >= 0) color: var(--success-color); @else color: var(--danger-color); @endif margin-bottom: 0.5rem;">
-                                @if($totalPoints >= 0) + @endif{{ $totalPoints }}
-                            </div>
-                            <p style="color: var(--text-secondary); font-size: 0.875rem;">
-                                @if($totalPoints >= 0)
-                                    <i class="fas fa-smile"></i> Hiệu suất tuyệt vời!
-                                @else
-                                    <i class="fas fa-frown"></i> Cần nỗ lực hơn
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-
+                <!-- UPCOMING SCHEDULES & QUICK ACTIONS -->
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
                     <!-- Upcoming Schedules -->
                     <div class="members-card">
                         <div class="card-header" style="border-bottom: 2px solid var(--primary-color);">
-                            <h2 class="card-title">Lịch dạy hôm nay</h2>
+                            <h2 class="card-title">Lịch dạy sắp tới (7 ngày)</h2>
                         </div>
                         @if($upcomingSchedules->isEmpty())
                             <div style="text-align: center; padding: 2rem 1rem; color: var(--text-secondary);">
                                 <i class="fas fa-calendar-times" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                                <p>Không có lịch dạy hôm nay</p>
+                                <p>Không có lịch dạy trong 7 ngày tới</p>
                             </div>
                         @else
                             <div style="max-height: 400px; overflow-y: auto;">
@@ -151,7 +132,7 @@
                                                 {{ $schedule->member->user->name ?? 'N/A' }}
                                             </div>
                                             <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                                                <i class="fas fa-clock"></i> {{ $schedule->start_time ?? 'N/A' }} - {{ $schedule->end_time ?? 'N/A' }}
+                                                <i class="fas fa-clock"></i> {{ \Carbon\Carbon::parse($schedule->booking_date)->format('d/m/Y') }} | {{ $schedule->start_time ?? 'N/A' }} - {{ $schedule->end_time ?? 'N/A' }}
                                             </div>
                                         </div>
                                         <span class="member-badge badge-success">
@@ -166,23 +147,23 @@
                             </div>
                         @endif
                     </div>
-                </div>
 
-                <!-- QUICK ACTIONS -->
-                <div class="members-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Liên kết nhanh</h2>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-                        <a href="{{ route('trainer.schedule.bookings') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem;">
-                            <i class="fas fa-calendar-check"></i> Lịch Đặt
-                        </a>
-                        <a href="{{ route('trainer.members.index') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem;">
-                            <i class="fas fa-users"></i> Danh Sách HV
-                        </a>
-                        <a href="{{ route('trainer.schedule.index') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem;">
-                            <i class="fas fa-calendar"></i> Lịch Làm Việc
-                        </a>
+                    <!-- QUICK ACTIONS -->
+                    <div class="members-card">
+                        <div class="card-header" style="border-bottom: 2px solid var(--primary-color);">
+                            <h2 class="card-title">Liên kết nhanh</h2>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem 0;">
+                            <a href="{{ route('trainer.schedule.bookings') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem; text-decoration: none;">
+                                <i class="fas fa-calendar-check"></i> Lịch Đặt
+                            </a>
+                            <a href="{{ route('trainer.members.index') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem; text-decoration: none;">
+                                <i class="fas fa-users"></i> Danh Sách HV
+                            </a>
+                            <a href="{{ route('trainer.schedule.index') }}" class="btn btn-primary" style="justify-content: center; padding: 1rem; text-decoration: none;">
+                                <i class="fas fa-calendar"></i> Lịch Làm Việc
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
