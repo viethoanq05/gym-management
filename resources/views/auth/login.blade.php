@@ -281,7 +281,6 @@
                                 <circle cx="12" cy="12" r="3" />
                             </svg>
                         </button>
-                        <button type="button" class="absolute right-2 top-2 text-slate-400" onclick="(this.previousElementSibling.type = this.previousElementSibling.type === 'password' ? 'text' : 'password')">👁️</button>
                     </div>
                     @error('password')
                     <div class="error-message"><i class="fas fa-exclamation-circle"></i> {{ $message }}</div>
