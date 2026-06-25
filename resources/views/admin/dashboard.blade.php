@@ -4,93 +4,88 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Widgets -->
+    <!-- Page Header -->
+    <div class="animate-fade-in-up">
+        <h2 class="text-2xl font-bold text-white">Tổng quan</h2>
+        <p class="text-sm text-slate-500 mt-1">Chào mừng trở lại! Đây là tóm tắt hoạt động hôm nay.</p>
+    </div>
+
+    <!-- Stat Widgets -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         @php
-        $trendBookingsClass = \Illuminate\Support\Str::startsWith(($trendBookings ?? ''), '-') ? 'red-600' : 'green-600';
+        $trendBookingsClass = \Illuminate\Support\Str::startsWith(($trendBookings ?? ''), '-') ? 'text-red-400' : 'text-emerald-400';
         @endphp
-        {{-- No need for defaults, controller provides them --}}
 
         @if(auth()->user()->role === 'admin')
-        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-slate-500">Tổng doanh thu</p>
-                <div class="h-10 w-10 rounded-lg bg-green-100 text-green-700 flex items-center justify-center">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 1v22" />
+        <!-- Revenue Card -->
+        <div class="glass-card p-5 stat-card animate-fade-in-up stagger-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-11 w-11 rounded-xl gradient-success flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">↑ {{ $trendRevenue }}</span>
             </div>
-            <div class="mt-3">
-                <div class="text-2xl font-bold truncate">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }} đ</div>
-                <div class="text-sm text-slate-400 mt-1">Trong tháng</div>
-                <div class="mt-2 text-sm text-green-600">↑ {{ $trendRevenue }} so với tháng trước</div>
-            </div>
+            <div data-kpi="revenue" class="text-2xl font-bold text-white tracking-tight">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }} đ</div>
+            <p class="text-xs text-slate-500 mt-1.5">Tổng doanh thu trong tháng</p>
         </div>
 
-        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-slate-500">Hội viên active</p>
-                <div class="h-10 w-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M12 12a5 5 0 100-10 5 5 0 000 10z" />
+        <!-- Members Card -->
+        <div class="glass-card p-5 stat-card animate-fade-in-up stagger-2">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-11 w-11 rounded-xl gradient-primary flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20">↑ {{ $trendMembers }}</span>
             </div>
-            <div class="mt-3">
-                <div class="text-2xl font-bold truncate">{{ $totalMembers ?? 0 }}</div>
-                <div class="text-sm text-slate-400 mt-1">Tổng hiện tại</div>
-                <div class="mt-2 text-sm text-green-600">↑ {{ $trendMembers }} so với tháng trước</div>
-            </div>
+            <div data-kpi="members" class="text-2xl font-bold text-white tracking-tight">{{ $totalMembers ?? 0 }}</div>
+            <p class="text-xs text-slate-500 mt-1.5">Hội viên đang hoạt động</p>
         </div>
         @endif
 
-        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-slate-500">Check-in hôm nay</p>
-                <div class="h-10 w-10 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M9 12l2 2 4-4" />
-                        <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
+        <!-- Check-in Card -->
+        <div class="glass-card p-5 stat-card animate-fade-in-up stagger-3">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-11 w-11 rounded-xl gradient-info flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">Live</span>
             </div>
-            <div class="mt-3">
-                <div class="text-2xl font-bold truncate">{{ $totalCheckIns ?? 0 }}</div>
-                <div class="text-sm text-slate-400 mt-1">Hôm nay</div>
-                <div class="mt-2 text-sm text-green-600">Cập nhật mới nhất</div>
-            </div>
+            <div class="text-2xl font-bold text-white tracking-tight">{{ $totalCheckIns ?? 0 }}</div>
+            <p class="text-xs text-slate-500 mt-1.5">Check-in hôm nay</p>
         </div>
 
-        <div class="rounded-2xl bg-white p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center justify-between">
-                <p class="text-sm text-slate-500">Booking hôm nay</p>
-                <div class="h-10 w-10 rounded-lg bg-yellow-100 text-yellow-700 flex items-center justify-center">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M8 7h8M8 11h8M8 15h8" />
+        <!-- Bookings Card -->
+        <div class="glass-card p-5 stat-card animate-fade-in-up stagger-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="h-11 w-11 rounded-xl gradient-warning flex items-center justify-center shadow-lg shadow-amber-500/20">
+                    <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium {{ $trendBookingsClass }} bg-white/5 px-2.5 py-1 rounded-full border border-white/10">{{ $trendBookings ?? '0%' }}</span>
             </div>
-            <div class="mt-3">
-                <div class="text-2xl font-bold truncate">{{ $bookingsToday ?? 0 }}</div>
-                <div class="text-sm text-slate-400 mt-1">Hôm nay</div>
-                <div class="{{ 'mt-2 text-sm text-' . $trendBookingsClass }}">{{ $trendBookings ?? '0%' }} so với hôm trước</div>
-            </div>
+            <div class="text-2xl font-bold text-white tracking-tight">{{ $bookingsToday ?? 0 }}</div>
+            <p class="text-xs text-slate-500 mt-1.5">Booking hôm nay</p>
         </div>
     </div>
 
     <!-- Chart + Recent Bookings -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         @if(auth()->user()->role === 'admin')
-        <div class="col-span-2 rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="col-span-2 glass-card p-6 animate-fade-in-up" style="animation-delay: 0.25s;">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
                 <div>
-                    <h3 class="text-lg font-semibold">Doanh thu</h3>
-                    <p class="text-sm text-slate-400">Cập nhật: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</p>
+                    <h3 class="text-base font-semibold text-white">Biểu đồ doanh thu</h3>
+                    <p class="text-xs text-slate-500 mt-1">Cập nhật: {{ \Carbon\Carbon::today()->format('d/m/Y') }}</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    <label for="timeFilter" class="text-sm text-slate-500">Khoảng thời gian</label>
-                    <select id="timeFilter" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                <div class="flex items-center gap-2">
+                    <select id="timeFilter" class="admin-input admin-select text-xs !py-2 !px-3 !rounded-lg w-auto">
                         <option value="7days" selected>7 ngày qua</option>
                         <option value="this_month">Tháng này</option>
                         <option value="this_quarter">Quý này</option>
@@ -99,100 +94,86 @@
             </div>
             @php
             $hasChartData = !empty($chartLabels) && !empty($chartData);
-            $chartEmptyDisplay = $hasChartData ? 'display:none;' : 'display:flex;';
             @endphp
-            <div id="chartWrapper" class="mt-4 w-full relative">
-                <div style="position: relative; height: 350px; width: 100%;">
+            <div id="chartWrapper" class="w-full relative">
+                <div style="position: relative; height: 320px; width: 100%;">
                     <canvas id="revenueChart" class="w-full h-full" data-dates='@json($chartLabels)' data-values='@json($chartData)'></canvas>
                 </div>
                 @if(! $hasChartData)
-                <div id="chartEmptyState" class="absolute inset-0 flex items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 text-slate-500">
+                <div id="chartEmptyState" class="absolute inset-0 flex items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02]">
                     <div class="text-center">
-                        <svg class="mx-auto h-16 w-16 text-slate-300 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M3 3v18h18" />
-                            <path d="M18 5l-5 5-4-4-6 6" />
+                        <svg class="mx-auto h-14 w-14 text-slate-600 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 3v18h18" /><path d="M18 5l-5 5-4-4-6 6" />
                         </svg>
-                        <p>Hôm nay chưa có dữ liệu ghi nhận</p>
+                        <p class="text-sm text-slate-500">Hôm nay chưa có dữ liệu ghi nhận</p>
                     </div>
                 </div>
                 @endif
-                <div id="chartLoadingOverlay" class="absolute inset-0 hidden items-center justify-center rounded-2xl bg-slate-50/80 backdrop-blur-sm">
+                <div id="chartLoadingOverlay" class="absolute inset-0 hidden items-center justify-center rounded-2xl bg-slate-950/60 backdrop-blur-sm">
                     <div class="space-y-2 text-center">
-                        <div class="h-3.5 w-32 animate-pulse rounded-full bg-slate-300"></div>
-                        <div class="h-3.5 w-24 animate-pulse rounded-full bg-slate-300"></div>
+                        <div class="h-3 w-32 animate-pulse rounded-full bg-slate-700"></div>
+                        <div class="h-3 w-24 animate-pulse rounded-full bg-slate-700"></div>
                     </div>
                 </div>
             </div>
         </div>
         @endif
 
-        <div class="rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition">
-            <h3 class="text-lg font-semibold mb-3">5 Lịch đặt mới nhất</h3>
-            <div class="mt-2">
-                <div class="overflow-x-auto">
-                    <table class="w-full table-auto text-sm">
-                        <thead>
-                            <tr class="text-left text-xs text-slate-500">
-                                <th class="pb-3">Mã</th>
-                                <th class="pb-3">Người đặt</th>
-                                <th class="pb-3">Ngày</th>
-                                <th class="pb-3">Giờ</th>
-                                <th class="pb-3">Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($recentBookings) && $recentBookings->isNotEmpty())
-                            @foreach($recentBookings as $b)
-                            @php
-                            $status = (int) ($b->status ?? 2);
-                            $badge = match($status) {
-                            1 => ['bg' => 'bg-blue-100', 'text' => 'text-blue-800', 'label' => 'Đã xác nhận'],
-                            0 => ['bg' => 'bg-red-100', 'text' => 'text-red-800', 'label' => 'Đã hủy'],
-                            default => ['bg' => 'bg-amber-100', 'text' => 'text-amber-800', 'label' => 'Chờ xử lý'],
-                            };
+        <!-- Recent Bookings -->
+        <div class="glass-card p-6 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-semibold text-white">Lịch đặt mới nhất</h3>
+                <span class="badge badge-primary">Top 5</span>
+            </div>
+            <div class="space-y-3">
+                @if(isset($recentBookings) && $recentBookings->isNotEmpty())
+                @foreach($recentBookings as $b)
+                @php
+                $status = (int) ($b->status ?? 2);
+                $badgeClass = match($status) {
+                    1 => 'badge-info',
+                    0 => 'badge-danger',
+                    default => 'badge-warning',
+                };
+                $badgeLabel = match($status) {
+                    1 => 'Đã xác nhận',
+                    0 => 'Đã hủy',
+                    default => 'Chờ xử lý',
+                };
 
-                            // Use nullsafe operator to avoid trying to read properties on null
-                            $name = $b->member?->user?->name ?? $b->user_name ?? 'Khách Vãng Lai';
+                // Use nullsafe operator to avoid trying to read properties on null
+                $name = $b->member?->user?->name ?? $b->user_name ?? 'Khách Vãng Lai';
 
-                            // Safe booking date formatting
-                            if (!empty($b->booking_date)) {
-                            $displayDate = \Carbon\Carbon::parse($b->booking_date)->format('d/m/Y');
-                            } elseif (!empty($b->created_at)) {
-                            $displayDate = \Carbon\Carbon::parse($b->created_at)->format('d/m/Y');
-                            } else {
-                            $displayDate = '-';
-                            }
+                // Safe booking date formatting
+                if (!empty($b->booking_date)) {
+                    $displayDate = \Carbon\Carbon::parse($b->booking_date)->format('d/m/Y');
+                } elseif (!empty($b->created_at)) {
+                    $displayDate = \Carbon\Carbon::parse($b->created_at)->format('d/m/Y');
+                } else {
+                    $displayDate = '-';
+                }
 
-                            $initials = trim(collect(explode(' ', $name))->map(fn($p) => substr($p, 0, 1))->join('')) ?: 'U';
-                            @endphp
-                            <tr class="border-t hover:bg-slate-50">
-                                <td class="py-3">#{{ $b->id }}</td>
-                                <td class="py-3 flex items-center gap-3">
-                                    <div class="h-8 w-8 flex-shrink-0 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center">{{ $initials }}</div>
-                                    <div>{{ $name }}</div>
-                                </td>
-                                <td class="py-3">{{ $displayDate }}</td>
-                                <td class="py-3">{{ $b->start_time ?? '—' }}</td>
-                                <td class="py-3">
-                                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $badge['bg'] }} {{ $badge['text'] }}">{{ $badge['label'] }}</span>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @else
-                            <tr>
-                                <td colspan="5" class="py-8">
-                                    <div class="flex flex-col items-center justify-center">
-                                        <svg class="h-12 w-12 text-slate-300 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-4-5h-4v4h4v-4z" />
-                                        </svg>
-                                        <p class="text-sm text-slate-500">Hiện tại chưa có lịch đặt nào mới</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                $initials = trim(collect(explode(' ', $name))->map(fn($p) => substr($p, 0, 1))->join('')) ?: 'U';
+                @endphp
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] transition group">
+                    <div class="h-9 w-9 flex-shrink-0 rounded-lg bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-500/20 text-indigo-300 flex items-center justify-center text-xs font-semibold">
+                        {{ $initials }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-slate-200 truncate">{{ $name }}</p>
+                        <p class="text-[0.7rem] text-slate-500">{{ $displayDate }} · {{ $b->start_time ?? '—' }}</p>
+                    </div>
+                    <span class="badge {{ $badgeClass }} text-[0.65rem]">{{ $badgeLabel }}</span>
                 </div>
+                @endforeach
+                @else
+                <div class="empty-state py-10">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <p>Hiện tại chưa có lịch đặt nào mới</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -211,14 +192,17 @@
         function parseChartData() {
             const labels = JSON.parse(chartEl.dataset.dates || '[]');
             const values = JSON.parse(chartEl.dataset.values || '[]');
-            return {
-                labels,
-                values
-            };
+            return { labels, values };
         }
 
         function renderChart(labels, values) {
             const ctx = chartEl.getContext('2d');
+
+            // Create gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
+            gradient.addColorStop(0.5, 'rgba(99, 102, 241, 0.08)');
+            gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
 
             if (revenueChart) {
                 revenueChart.data.labels = labels;
@@ -234,21 +218,36 @@
                     datasets: [{
                         label: 'Doanh thu',
                         data: values,
-                        tension: 0.3,
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37, 99, 235, 0.15)',
+                        tension: 0.4,
+                        borderColor: '#818cf8',
+                        backgroundColor: gradient,
                         fill: true,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#2563eb',
-                        pointBorderWidth: 0,
-                        borderWidth: 2
+                        pointRadius: 0,
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#818cf8',
+                        pointHoverBorderColor: '#0f172a',
+                        pointHoverBorderWidth: 3,
+                        borderWidth: 2.5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
                     plugins: {
                         tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleColor: '#e2e8f0',
+                            bodyColor: '#94a3b8',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            cornerRadius: 10,
+                            padding: 12,
+                            titleFont: { family: 'Inter', size: 13, weight: '600' },
+                            bodyFont: { family: 'Inter', size: 12 },
                             callbacks: {
                                 label: function(context) {
                                     const value = context.parsed.y || 0;
@@ -256,25 +255,26 @@
                                 }
                             }
                         },
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         x: {
-                            grid: {
-                                display: false
-                            },
+                            grid: { display: false },
+                            border: { display: false },
                             ticks: {
-                                color: '#64748b'
+                                color: '#475569',
+                                font: { family: 'Inter', size: 11 }
                             }
                         },
                         y: {
                             grid: {
-                                color: 'rgba(148, 163, 184, 0.15)'
+                                color: 'rgba(255, 255, 255, 0.04)',
+                                drawBorder: false,
                             },
+                            border: { display: false },
                             ticks: {
-                                color: '#64748b',
+                                color: '#475569',
+                                font: { family: 'Inter', size: 11 },
                                 callback: function(value) {
                                     return new Intl.NumberFormat('vi-VN').format(value);
                                 }
