@@ -115,10 +115,12 @@ class MemberBookingController extends Controller
 
         // Kiểm tra: không cho hủy nếu còn dưới 2 giờ trước giờ hẹn
         $bookingDateTime = \Carbon\Carbon::parse($booking->booking_date->format('Y-m-d') . ' ' . $booking->start_time);
-        $hoursRemaining = now()->diffInHours($bookingDateTime, false);
+        $minutesRemaining = now()->diffInMinutes($bookingDateTime, false);
 
-        if ($hoursRemaining < 2) {
-            return back()->with('error', "Không thể hủy lịch. Chỉ được hủy trước giờ hẹn tối thiểu 2 giờ (hiện còn {$hoursRemaining} giờ).");
+        if ($minutesRemaining < 120) {
+            $hours = floor(max($minutesRemaining, 0) / 60);
+            $mins = max($minutesRemaining, 0) % 60;
+            return back()->with('error', "Không thể hủy lịch. Chỉ được hủy trước giờ hẹn tối thiểu 2 giờ (hiện còn {$hours} giờ {$mins} phút).");
         }
 
         $booking->update([
