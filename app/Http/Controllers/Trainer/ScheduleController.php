@@ -25,8 +25,7 @@ class ScheduleController extends Controller
             ->where('work_date', '>=', Carbon::today())
             ->orderBy('work_date')
             ->orderBy('start_time')
-            ->paginate(15);
-
+            ->simplePaginate(10);
         return view('trainer.schedule.index', [
             'schedules' => $schedules,
             'trainer' => $trainer,
@@ -82,24 +81,28 @@ class ScheduleController extends Controller
         if (!$trainer) {
             return redirect()->route('login');
         }
-
         if ($booking->trainer_id !== $trainer->id) {
-            return redirect()->back()->with('error', 'Không có quyền thao tác');
+            return redirect()->back()->with('error', 'Bạn không có quyền thao tác trên lịch hẹn này.');
         }
-
-        // Kiểm tra xem có thể hủy lịch hay không
         if (!$booking->canBeCancelled()) {
-            $bookingDateTime = Carbon::parse($booking->booking_date . ' ' . $booking->start_time);
-            $hoursUntilBooking = now()->diffInHours($bookingDateTime, false);
-            $hoursRequired = $booking->cancellation_hours_before;
-            $hoursNeeded = $hoursRequired - $hoursUntilBooking;
-            return redirect()->back()->with('error', "Không thể hủy lịch. Phải hủy trước tối thiểu {$hoursRequired} giờ. Còn {$hoursUntilBooking} giờ nữa, cần chờ thêm {$hoursNeeded} giờ");
-        }
+            $dateOnly = Carbon::parse($booking->booking_date)->format('Y-m-d');
+            $bookingDateTime = Carbon::parse($dateOnly . ' ' . $booking->start_time);
+            $hoursUntilBooking = round(now()->diffInHours($bookingDateTime, false));
+            $hoursRequired = round($booking->cancellation_hours_before);
 
+            if ($hoursUntilBooking < 0) {
+                $errorMessage = "Không thể hủy lịch. Lịch hẹn này đã hoặc đang diễn ra.";
+            } else {
+                $hoursOverdue = $hoursRequired - $hoursUntilBooking;
+                $errorMessage = "Không thể hủy lịch. Quy định phải hủy trước tối thiểu {$hoursRequired} giờ. Hiện tại chỉ còn {$hoursUntilBooking} giờ nữa là đến lịch (Bạn đã quá hạn hủy {$hoursOverdue} giờ).";
+            }
+
+            return redirect()->back()->with('error', $errorMessage);
+        }
         $booking->status = 0; // cancelled
         $booking->cancelled_at = now();
         $booking->save();
 
-        return redirect()->back()->with('success', 'Đã hủy lịch thành công');
+        return redirect()->back()->with('success', 'Đã hủy lịch thành công.');
     }
 }

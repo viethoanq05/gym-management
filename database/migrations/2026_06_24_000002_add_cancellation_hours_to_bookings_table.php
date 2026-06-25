@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->integer('cancellation_hours_before')->default(24)->comment('Số giờ tối thiểu phải hủy lịch trước');
+            $table->integer('cancellation_hours_before')->default(2)->comment('Số giờ tối thiểu phải hủy lịch trước');
             $table->dateTime('cancelled_at')->nullable();
         });
     }
