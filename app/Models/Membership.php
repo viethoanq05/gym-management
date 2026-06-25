@@ -12,6 +12,7 @@ class Membership extends Model
     public const WAITING_PAYMENT = 2;
     public const CANCELLED = 3;
 
+    protected $table = 'memberships';
     protected $fillable = [
         'member_id',
         'package_id',
@@ -35,8 +36,13 @@ class Membership extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function package(): BelongsTo
+    public function package()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

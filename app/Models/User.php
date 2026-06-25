@@ -52,12 +52,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function member(): HasOne
+    /**
+     * Quan hệ 1-1 tới bảng members (thông tin thể chất của member)
+     */
+    public function member()
     {
         return $this->hasOne(Member::class);
     }
 
-    public function trainer(): HasOne
+    /**
+     * Quan hệ 1-1 tới bảng trainers (thông tin PT của trainer)
+     */
+    public function trainer()
     {
         return $this->hasOne(Trainer::class);
     }
