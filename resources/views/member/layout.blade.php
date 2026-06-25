@@ -250,7 +250,7 @@
 
                 <div class="w-px h-6 bg-slate-200"></div>
 
-                {{-- Avatar Popup (YouTube-style) --}}
+                {{-- Avatar Popup --}}
                 <div class="relative" id="avatar-wrapper">
                     <button onclick="toggleAvatar()" class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition">
                         <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=1662ff&color=fff&bold=true' }}" alt="Avatar" class="w-9 h-9 rounded-full object-cover border-2 border-blue-500">

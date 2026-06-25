@@ -114,6 +114,10 @@
                                 <span class="w-3 h-3 rounded bg-slate-100 border border-slate-300"></span>
                                 <span class="text-slate-500">Ngoài giờ làm</span>
                             </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded bg-slate-50 border border-slate-200 opacity-60"></span>
+                                <span class="text-slate-500">Đã qua</span>
+                            </div>
                         </div>
 
                         <!-- Slots Container -->
@@ -228,6 +232,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderSlots(schedules, booked) {
         slotsContainer.innerHTML = '';
 
+        // Determine current time for "past slot" detection
+        const selectedDate = dateInput.value;
+        const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD format
+        const isToday = selectedDate === todayStr;
+        const nowMinutes = isToday ? (new Date().getHours() * 60 + new Date().getMinutes()) : -1;
+
         schedules.forEach(schedule => {
             const shiftEl = document.createElement('div');
             shiftEl.className = 'mb-3';
@@ -257,12 +267,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     return t < bEnd && (t + 60) > bStart;
                 });
 
+                // Check if this slot is in the past (only when date is today)
+                const isPast = isToday && t < nowMinutes;
+
                 const slot = document.createElement('button');
                 slot.type = 'button';
                 const freeClass = 'rounded-xl px-3 py-2.5 text-xs font-bold transition text-center border bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:border-emerald-300 hover:shadow-sm cursor-pointer';
                 const selectedClass = 'rounded-xl px-3 py-2.5 text-xs font-bold transition text-center border ring-2 ring-blue-500 bg-blue-50 border-blue-300 text-blue-700';
 
-                if (isBooked) {
+                if (isPast) {
+                    // Past slot - greyed out
+                    slot.className = 'rounded-xl px-3 py-2.5 text-xs font-bold transition text-center border bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed opacity-60';
+                    slot.innerHTML = `<div>${slotStart} - ${slotEnd}</div><div class="text-[10px] font-semibold mt-0.5 opacity-70">Đã qua</div>`;
+                    slot.disabled = true;
+                } else if (isBooked) {
                     slot.className = 'rounded-xl px-3 py-2.5 text-xs font-bold transition text-center border bg-red-50 border-red-200 text-red-400 cursor-not-allowed';
                     slot.innerHTML = `<div>${slotStart} - ${slotEnd}</div><div class="text-[10px] font-semibold mt-0.5 opacity-70">Đã đặt</div>`;
                     slot.disabled = true;

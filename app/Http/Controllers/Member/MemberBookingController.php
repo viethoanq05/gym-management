@@ -46,6 +46,16 @@ class MemberBookingController extends Controller
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
         ]);
 
+       
+        if ($data['booking_date'] === now()->toDateString()) {
+            $currentTime = now()->format('H:i');
+            if ($data['start_time'] < $currentTime) {
+                return back()->withErrors([
+                    'start_time' => 'Không thể đặt lịch cho khung giờ đã qua. Vui lòng chọn khung giờ sau ' . $currentTime . '.',
+                ])->withInput();
+            }
+        }
+
         $member = Auth::user()?->member;
 
         if (! $member) {
@@ -107,9 +117,7 @@ class MemberBookingController extends Controller
         return back()->with('success', 'Đã hủy lịch PT.');
     }
 
-    /**
-     * API: Trả về lịch làm việc + booking đã đặt của PT trong 1 ngày.
-     */
+    
     public function getTrainerAvailability(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate([
@@ -120,14 +128,14 @@ class MemberBookingController extends Controller
         $trainerId = $request->input('trainer_id');
         $date = $request->input('date');
 
-        // Lịch làm việc của PT trong ngày
+        
         $schedules = TrainerSchedule::query()
             ->where('trainer_id', $trainerId)
             ->whereDate('work_date', $date)
             ->orderBy('start_time')
             ->get(['start_time', 'end_time']);
 
-        // Các booking đã đặt (pending / confirmed) trong ngày
+        
         $bookedSlots = Booking::query()
             ->where('trainer_id', $trainerId)
             ->whereDate('booking_date', $date)
